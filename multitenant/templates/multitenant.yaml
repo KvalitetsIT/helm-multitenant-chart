@@ -1,18 +1,21 @@
-{{- range $key, $value := .Values.tennants }}
+{{- range .Values.tennants }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ $key }}
-  namespace: {{ $key }}
+  name: {{ .ns }}
 ---
 
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  namespace: {{ $key }}
-  name: {{$key}}-quota
+  namespace: {{ .ns }}
+  name: {{.ns}}-quota
 spec:
-  hard: {{ $value.limits}}
+  hard:
+    cpu: {{ .limits.cpu }}
+    memory: {{ .limits.memory  }}
+    pods: {{ .limits.pods }}
+    gold.storageclass.storage.k8s.io/requests.storage: {{ .limits.requests.storage }}
 
 ---
 {{ end }}
