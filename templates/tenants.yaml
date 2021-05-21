@@ -1,0 +1,18 @@
+{{- range $key, $value := .Values.tennants }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $key }}
+  namespace: {{ $key }}
+---
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  namespace: {{ $key }}
+  name: {{$key}}-quota
+spec:
+  hard: {{ $value.limits}}
+
+---
+{{ end }}
