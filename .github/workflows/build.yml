@@ -42,7 +42,7 @@ jobs:
         run: ./build/push-repo.sh ${{ secrets.KIT_GITHUB_ACCESS }}
 
       - name: Generate index file
-        run: ./build/sync-repo.sh
+        run: ./build/sync_repo.sh
         env:
           workspace: .
           chartName: multitenant
