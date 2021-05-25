@@ -11,11 +11,21 @@ The values file could look like this:
 
 ```yml
 tennants:
-  - test:
-    ns: test
-    limits:
-      cpu: 1000
-      memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+- test:
+  ns: test
+  limits:
+    cpu: 1000
+    memory: 200Gi
+    gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+- Jens:
+  ns: Jens
+  limits:
+    cpu: 1000
+    memory: 200Gi
+    gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+```
 
+# Testing the values-file
+```sh
+helm template   --values values.yaml   --output-dir ./manifests     ./
 ```
