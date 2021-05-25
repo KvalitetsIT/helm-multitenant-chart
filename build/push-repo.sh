@@ -11,7 +11,6 @@ cd helm-repo
 helm repo index . --url https://raw.githubusercontent.com/KvalitetsIT/helm-repo/master/
 ls -a
 cp ../../multitenant-*.tgz multitenant
-cat ../../index.yaml
 git add -A
 git commit -m "Adding new multitenant chart"
 git push https://$1@github.com/KvalitetsIT/helm-repo
