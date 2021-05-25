@@ -34,13 +34,19 @@ jobs:
         if:  ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: echo ::set-output name=VERSION::'0.0.0'
 
-
       - name: Build and test helm chart
         run: ./build/build-helm.sh multitenant ${{ steps.tag.outputs.VERSION }} ${{ steps.trunk.outputs.VERSION }}
 
       - name: Push tagged helm chart to repo
         if: ${{ steps.tag.conclusion != 'skipped' }}
         run: ./build/push-repo.sh ${{ secrets.KIT_GITHUB_ACCESS }}
+
+      - name: Generate index file
+        run: ./build/sync-repo.sh
+        env:
+          workspace: .
+          chartName: multitenant
+
 
 #      - name: Push main helm chart to repo
 #        if: ${{ steps.trunk.conclusion != 'skipped' }}
