@@ -1,11 +1,1 @@
-tennants:
-- test:
-    limits:
-      cpu: 1000
-      memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
-- jens:
-    limits:
-      cpu: 1000
-      memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+tennants: []
