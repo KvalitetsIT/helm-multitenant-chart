@@ -5,3 +5,9 @@ tennants:
       cpu: 1000
       memory: 200Gi
       gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+  - Jens:
+    ns: jens
+    limits:
+      cpu: 1000
+      memory: 200Gi
+      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
