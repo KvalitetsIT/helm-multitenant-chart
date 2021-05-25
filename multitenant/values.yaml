@@ -1,13 +1,11 @@
 tennants:
 - test:
-  ns: test
-  limits:
-    cpu: 1000
-    memory: 200Gi
-    gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+    limits:
+      cpu: 1000
+      memory: 200Gi
+      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
 - Jens:
-  ns: Jens
-  limits:
-    cpu: 1000
-    memory: 200Gi
-    gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+    limits:
+      cpu: 1000
+      memory: 200Gi
+      gold.storageclass.storage.k8s.io/requests.storage: 100Gi

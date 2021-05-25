@@ -1,18 +1,21 @@
 {{- range .Values.tennants }}
+
+{{- range $name, $values := . }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .ns }}
+  name: {{ $name }}
 ---
 
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  namespace: {{ .ns }}
-  name: {{.ns}}-quota
+  namespace: {{ $name }}
+  name: {{$name}}-quota
 spec:
   hard:
-{{- range $key,$val := .limits }}
+{{- range $key,$val := $values.limits }}
     {{ $key }} : {{ $val }}{{ end }}
 ---
+{{ end }}
 {{ end }}
