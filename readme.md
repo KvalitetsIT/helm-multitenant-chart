@@ -4,3 +4,17 @@ When adding a new tennant u need to do the following things:
 1. A new namespace will be created in the cluster for each user in the values-file. When using argo, the namespace needs to be added to 'destinations' under your project
 
 And thats it! You now have a new tennant with limitations!
+
+
+# Values file
+The values file could look like this:
+
+```yml
+tennants:
+  - test: #The name of the tenant
+      limits:
+        cpu: "1000"
+        memory: 200Gi
+        pods: "10"
+
+```
