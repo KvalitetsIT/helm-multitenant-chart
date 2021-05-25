@@ -41,12 +41,6 @@ jobs:
         if: ${{ steps.tag.conclusion != 'skipped' }}
         run: ./build/push-repo.sh ${{ secrets.KIT_GITHUB_ACCESS }}
 
-      - name: Generate index file
-        run: ./build/sync_repo.sh
-        env:
-          workspace: .
-          chartName: multitenant
-
 
 #      - name: Push main helm chart to repo
 #        if: ${{ steps.trunk.conclusion != 'skipped' }}
