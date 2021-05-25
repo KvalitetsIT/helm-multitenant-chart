@@ -12,10 +12,7 @@ metadata:
   name: {{.ns}}-quota
 spec:
   hard:
-    cpu: {{ .limits.cpu }}
-    memory: {{ .limits.memory  }}
-    pods: {{ .limits.pods }}
-    gold.storageclass.storage.k8s.io/requests.storage: {{ .limits.requests.storage }}
-
+{{- range $key,$val := .limits }}
+    {{ $key }} : {{ $val }}{{ end }}
 ---
 {{ end }}
