@@ -1,0 +1,6 @@
+tennants:
+  - test:
+      limits:
+        cpu: "1000"
+        memory: 200Gi
+        pods: "10"
