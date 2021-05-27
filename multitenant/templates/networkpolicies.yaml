@@ -1,7 +1,7 @@
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 
-#https://www.openshift.com/blog/guide-to-kubernetes-ingress-network-policies
+#Comments are from : https://www.openshift.com/blog/guide-to-kubernetes-ingress-network-policies
 
 #=================== Network policies ===================
 #The effect of the following policy specification is to isolate all pods, which means that only connections explicitly listed by other network policies will be allowed.
