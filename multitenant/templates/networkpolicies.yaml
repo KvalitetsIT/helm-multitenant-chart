@@ -41,6 +41,16 @@ spec:
     - namespaceSelector:
         matchLabels:
           name: {{ $name }}
+
+{{- if ($values.allowInternetAccess)}}
+{{- if $values.allowInternetAccess}}
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+          - 10.0.0.0/20
+          - 10.0.16.0/20
+{{- end }}
+{{- end }}
 ---
 {{ end }}
 {{ end }}
