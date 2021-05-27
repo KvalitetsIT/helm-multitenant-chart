@@ -1,0 +1,14 @@
+{{- range .Values.tennants }}
+
+{{- range $name, $values := . }}
+
+#=================== Namespace ===================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}
+
+---
+
+{{ end }}
+{{ end }}

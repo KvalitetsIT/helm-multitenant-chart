@@ -1,41 +1,57 @@
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+
+#https://www.openshift.com/blog/guide-to-kubernetes-ingress-network-policies
+
+#=================== Network policies ===================
+
+
+#The effect of the following policy specification is to isolate all pods, which means that only connections explicitly listed by other network policies will be allowed.
+
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-openshift-ingress
+  name: default-deny-all
 spec:
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          network.openshift.io/policy-group: ingress
   podSelector: {}
   policyTypes:
   - Ingress
 
 ---
 
+#Explicitly allow internet access for pods that need it
+#With just the default-deny-all policy in place in every namespace, none of your pods will be able to talk to each other or receive traffic from the Internet
+#Therefor all pods needing internet access must be given the label networking/allow-internet-access: "true"
+
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-openshift-monitoring
+  name: internet-access
 spec:
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          network.openshift.io/policy-group: monitoring
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      networking/allow-internet-access: "true" #pods needs this
   policyTypes:
   - Ingress
+  ingress:
+  - {}
 
 ---
 
-kind: NetworkPolicy
+#You can use the following network policy to allow all pod-to-pod communication within a namespace:
+
 apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
   name: allow-same-namespace
 spec:
-  podSelector:
+  podSelector: {}
+  policyTypes:
+  - Ingress
   ingress:
   - from:
     - podSelector: {}
+
+---
+{{ end }}
+{{ end }}

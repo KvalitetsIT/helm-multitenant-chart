@@ -1,12 +1,6 @@
 {{- range .Values.tennants }}
-
 {{- range $name, $values := . }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ $name }}
----
-
+#=================== Ressource quota ===================
 apiVersion: v1
 kind: ResourceQuota
 metadata:
