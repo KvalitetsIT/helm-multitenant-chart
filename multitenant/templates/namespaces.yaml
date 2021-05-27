@@ -1,3 +1,6 @@
+#This namespace should already be present
+#This is just to modify the label, to make it easier to whitelist in networkpolicies
+
 apiVersion: v1
 kind: Namespace
 metadata:

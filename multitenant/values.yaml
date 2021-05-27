@@ -1,7 +1,11 @@
 tennants:
 - test-from-helm-multitenant-repo:
-    allowInternetAccess : true
     limits:
       cpu: 1000
       memory: 200Gi
       gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+    allowInternetAccess : true
+    ingressAllowedNamespaces:
+      - ingress-nginx
+    egressAllowedNamespaces:
+      - ingress-nginx

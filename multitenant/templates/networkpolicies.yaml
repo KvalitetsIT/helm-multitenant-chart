@@ -36,11 +36,21 @@ spec:
     - namespaceSelector:
         matchLabels:
           name: {{ $name }}
+{{- range $allowedIngress := $values.ingressAllowedNamespaces }}
+    - namespaceSelector:
+        matchLabels:
+          name: {{ $allowedIngress }}
+{{- end }}
   egress:
   - to:
     - namespaceSelector:
         matchLabels:
           name: {{ $name }}
+{{- range $allowedEngress := $values.egressAllowedNamespaces }}
+    - namespaceSelector:
+        matchLabels:
+          name: {{ $allowedEngress }}
+{{ end }}
 
 {{- if ($values.allowInternetAccess)}}
 {{- if $values.allowInternetAccess}}

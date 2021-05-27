@@ -11,16 +11,16 @@ The values file could look like this:
 
 ```yml
 tennants:
-- test: #Name of namespace and prefix for the ressourcequota
+- test-from-helm-multitenant-repo:
+    allowInternetAccess : true #True if tennant should be able to reach internet
     limits:
       cpu: 1000
       memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
-- Jens:
-    limits:
-      cpu: 1000
-      memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+      longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
+    ingressAllowedNamespaces: #Namespaces that should be able to reach this namespace
+      - ingress-nginx
+    egressAllowedNamespaces: #Namespaces that this tennant needs to be able to reach
+      - ingress-nginx
 
 ```
 
