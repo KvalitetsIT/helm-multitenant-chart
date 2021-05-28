@@ -7,12 +7,12 @@ When adding a new tennant u need to do the following things:
 
 1. Syncronize in Argo!
 
-And thats it! You now have a new tennant with limitations!
+And thats it! You now have a new isolated tennant with the limitations you provided!
 
 ### What is created?
 The following is created pr tennant:
 - Namespace
-  - Labels is set to navn=[tennant-navn] (this makes it easy to reference it in networkpolicies)
+  - Labels is set to `navn=[tennant-name]` (this makes it easy to reference it in networkpolicies)
 - Network policy (ingress and egress)
   - Deny all traffic as default
   - Allow from same namespace
@@ -27,11 +27,14 @@ Every item in the list tennants will be a dictionary, and the `key` will be the 
 
 The values file could look like this:
 ```yaml
+egressNetworksToBlock: #If allowInternetAccess is true, what networks should we not allow traffic to
+  - 10.0.0.0/20
+  - 10.0.16.0/20
 tennants:
 - test-from-helm-multitenant-repo: #This will be the name of the namespace
     allowInternetAccess : true #True if tennant should be able to reach internet
-    limits:
-      cpu: 1000
+    limits: #Can be removed to remove limits
+      cpu: 1000 #This is the number of allocated VCPU's (1000 is alot of vcpu's)
       memory: 200Gi
       longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
     ingressAllowedNamespaces: #Namespaces that should be able to reach this namespace
@@ -41,7 +44,7 @@ tennants:
 ```
 ### ingressAllowedNamespaces and egressAllowedNamespaces
 ```yml
-ingressAllowedNamespaces:
+ingressAllowedNamespaces: #Namespaces that should be able to reach this namespace
   - ingress-nginx
 egressAllowedNamespaces: #Namespaces that this tennant needs to be able to reach
   - ingress-nginx

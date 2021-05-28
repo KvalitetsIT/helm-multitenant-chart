@@ -1,3 +1,5 @@
+{{- $valuesAtStart := .Values}}
+
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 
@@ -20,11 +22,10 @@ spec:
 ---
 
 #You can use the following network policy to allow all pod-to-pod communication within a namespace:
-
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ $name }}-allow-same-namespace
+  name: {{ $name }}-allow-namespaces
   namespace: {{ $name }}
 spec:
   podSelector: {}
@@ -56,9 +57,9 @@ spec:
 {{- if $values.allowInternetAccess}}
     - ipBlock:
         cidr: 0.0.0.0/0
-        except:
-          - 10.0.0.0/20
-          - 10.0.16.0/20
+{{- if($valuesAtStart.egressNetworksToBlock) }}
+        except: {{ $valuesAtStart.egressNetworksToBlock  }}
+{{- end }}
 {{- end }}
 {{- end }}
 ---
