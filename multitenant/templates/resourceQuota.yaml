@@ -1,5 +1,6 @@
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
+{{- if ($values.limits) }}
 #=================== Ressource quota ===================
 apiVersion: v1
 kind: ResourceQuota
@@ -11,5 +12,6 @@ spec:
 {{- range $key,$val := $values.limits }}
     {{ $key }} : {{ $val }}{{ end }}
 ---
+{{ end }}
 {{ end }}
 {{ end }}
