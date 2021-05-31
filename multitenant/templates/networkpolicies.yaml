@@ -6,20 +6,6 @@
 #Comments are from : https://www.openshift.com/blog/guide-to-kubernetes-ingress-network-policies
 
 #=================== Network policies ===================
-#The effect of the following policy specification is to isolate all pods, which means that only connections explicitly listed by other network policies will be allowed.
-
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: {{ $name }}-default-deny-all
-  namespace: {{ $name }}
-spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
-  - Egress
-
----
 #You can use the following network policy to allow all pod-to-pod communication within a namespace:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
