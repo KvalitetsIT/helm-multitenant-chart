@@ -20,26 +20,6 @@ spec:
   - Egress
 
 ---
-
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: {{ $name }}-allow-dns-access
-  namespace: {{ $name }}
-spec:
-  egress:
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    ports:
-    - protocol: UDP
-      port: 53
-  podSelector: {}
-  policyTypes:
-  - Egress
-
----
 #You can use the following network policy to allow all pod-to-pod communication within a namespace:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -53,6 +33,8 @@ spec:
   - Egress
   ingress:
   - from:
+    - ipBlock:
+        cidr: 10.0.0.0/20
     - namespaceSelector:
         matchLabels:
           name: {{ $name }}
