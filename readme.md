@@ -89,3 +89,9 @@ All deployments belonging to a namespace, that is limited by ressourceQuotas, ne
 ```sh
 helm template   --values values.yaml   --output-dir ./manifests     ./
 ```
+# Deploying first apps
+You will need to take this test-tennant; https://github.com/KvalitetsIT/kithosting-test-kunde and adapt to your needs
+
+## Prometheus
+1. Prometheus will expect there to be a secret called `keycloakproxyclient`, this is a secret that is already in the `infrastructure`-namespace
+1. 
