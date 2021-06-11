@@ -1,0 +1,15 @@
+{{- range .Values.sharedServices }}
+{{- range $name, $values := . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{$name}}-cm
+  namespace: {{$name}}
+  labels:
+    app.kubernetes.io/name: {{$name}}-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  repositories: |
+    - url: {{$values.repository}}
+{{ end }}
+{{ end }}
