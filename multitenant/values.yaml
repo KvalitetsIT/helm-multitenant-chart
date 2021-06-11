@@ -17,7 +17,7 @@ tennants:
 sharedServices:
 - data-storage-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
-    namespace: infrastructure
+    appnamespace: infrastructure
 - login-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
-    namespace: infrastructure
+    appnamespace: infrastructure
