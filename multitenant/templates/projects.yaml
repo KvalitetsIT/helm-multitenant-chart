@@ -20,7 +20,9 @@ spec:
 
   # Only permit applications to deploy to the guestbook namespace in the same cluster
   destinations:
-  - namespace: '*'
+  - namespace: {{$name}}
+    server: https://kubernetes.default.svc
+  - namespace: {{$valuesAtStart.appnamespace}}
     server: https://kubernetes.default.svc
 
   # Deny all cluster-scoped resources from being created, except for Namespace
