@@ -12,6 +12,8 @@ kind: NetworkPolicy
 metadata:
   name: {{ $name }}-allow-namespaces
   namespace: {{ $name }}
+  labels:
+    type: tenant
 spec:
   podSelector: {}
   policyTypes:

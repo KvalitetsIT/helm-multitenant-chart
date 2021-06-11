@@ -6,6 +6,7 @@ metadata:
   name: {{ $name }}
   labels:
     name: {{ $name }}
+    type: shared-service
 
 ---
 {{ end }}
@@ -21,6 +22,7 @@ metadata:
   name: {{ $name }}
   labels:
     name: {{ $name }}
+    type: tenant
 
 ---
 {{ end }}

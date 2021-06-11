@@ -7,6 +7,8 @@ kind: ResourceQuota
 metadata:
   namespace: {{ $name }}
   name: {{$name}}-quota
+  labels:
+    type: tenant
 spec:
   hard:
 {{- range $key,$val := $values.limits }}

@@ -6,6 +6,8 @@ kind: AppProject
 metadata:
   name: {{$name}}
   namespace: {{$values.appnamespace}}
+  labels:
+    type: shared-service
 spec:
   # Project description
   description: Project containing shared services
