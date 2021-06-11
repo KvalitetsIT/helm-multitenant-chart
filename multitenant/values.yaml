@@ -6,9 +6,14 @@ tennants:
     limits:
       cpu: 1000
       memory: 200Gi
-      gold.storageclass.storage.k8s.io/requests.storage: 100Gi
+      longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
     allowInternetAccess : true
     ingressAllowedNamespaces:
+      - DataStorageServices
       - ingress-nginx
     egressAllowedNamespaces:
       - ingress-nginx
+
+sharedServices:
+  - data-storage-services
+  - login-services

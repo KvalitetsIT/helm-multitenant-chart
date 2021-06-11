@@ -1,5 +1,18 @@
-{{- range .Values.tennants }}
 
+{{- range .Values.sharedServices }}
+{{- range $name, $values := . }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}
+  labels:
+    name: {{ $name }}
+
+---
+{{ end }}
+{{ end }}
+
+{{- range .Values.tennants }}
 {{- range $name, $values := . }}
 
 #=================== Namespace ===================
@@ -11,6 +24,5 @@ metadata:
     name: {{ $name }}
 
 ---
-
 {{ end }}
 {{ end }}

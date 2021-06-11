@@ -1,0 +1,32 @@
+{{- range .Values.sharedServices }}
+{{- range $name, $values := . }}
+#=================== Namespace ===================
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{$name}}
+  namespace: {{$name}}
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  # Project description
+  description: Project containing shared services : {{$name}}
+
+  # Allow manifests to deploy from any Git repos
+  sourceRepos:
+  - '{{$values.repository}}'
+
+  # Only permit applications to deploy to the guestbook namespace in the same cluster
+  destinations:
+  - namespace: '*'
+    server: https://kubernetes.default.svc
+
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+---
+{{ end }}
+{{ end }}
