@@ -11,7 +11,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   # Project description
-  description: Project containing shared services : {{$name}}
+  description: Project containing shared services 
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:

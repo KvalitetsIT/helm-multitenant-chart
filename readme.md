@@ -93,5 +93,5 @@ helm template   --values values.yaml   --output-dir ./manifests     ./
 You will need to take this test-tennant; https://github.com/KvalitetsIT/kithosting-test-kunde and adapt to your needs
 
 ## Prometheus
-1. Prometheus will expect there to be a secret called `keycloakproxyclient`, this is a secret that is already in the `infrastructure`-namespace
+1. Prometheus will expect there to be a secret called `keycloakproxyclient` in the tennant-namespace, this is a secret that is already in the `infrastructure`-namespace
 1. 
