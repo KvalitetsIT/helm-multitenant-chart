@@ -15,5 +15,7 @@ tennants:
       - ingress-nginx
 
 sharedServices:
-  - data-storage-services
-  - login-services
+- data-storage-services:
+    repository: 'https://github.com/KvalitetsIT/kithosting-LoginServices'
+- login-services:
+    repository: "https://github.com/KvalitetsIT/kithosting-LoginServices"
