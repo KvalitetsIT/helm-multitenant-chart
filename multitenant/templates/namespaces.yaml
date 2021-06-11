@@ -1,4 +1,3 @@
-
 {{- range .Values.sharedServices }}
 {{- range $name, $values := . }}
 apiVersion: v1

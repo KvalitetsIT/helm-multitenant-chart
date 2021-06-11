@@ -5,7 +5,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: {{$name}}
-  namespace: {{$name.namespace}}
+  namespace: {{$name}}
 spec:
   # Project description
   description: Project containing shared services
