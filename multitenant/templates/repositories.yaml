@@ -11,5 +11,6 @@ metadata:
 data:
   repositories: |
     - url: {{$values.repository}}
+---
 {{ end }}
 {{ end }}
