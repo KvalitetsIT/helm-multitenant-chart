@@ -1,3 +1,5 @@
+{{- $valuesAtStart := .Values}}
+
 {{- range .Values.sharedServices }}
 {{- range $name, $values := . }}
 #=================== Namespace ===================
@@ -5,7 +7,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: {{$name}}
-  namespace: {{$values.appnamespace}}
+  namespace: {{$valuesAtStart.appnamespace}}
   labels:
     type: shared-service
 spec:
