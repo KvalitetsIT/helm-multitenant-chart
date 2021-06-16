@@ -2,6 +2,8 @@
 # What todo when adding new tenant
 1. Extend values.yaml with new tennant (this will create a new namespace)
 1. Create new Argo-project
+    *The new tenant will need a new project in Argo. This project should be called the same as the namespace, which should be called the same as the tenant.*
+    This application should have the following properties:
     1. Update argo-destinations (settings => projects => infrastructure) with a new entry containing the new namespace fx ``https://kubernetes.default.svc | tenant ``
     2. Add source repositories
     3. Add * to Cluster Resource Allow list
