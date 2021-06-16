@@ -2,8 +2,10 @@
 # What todo when adding new tenant
 1. Extend values.yaml with new tennant (this will create a new namespace)
 1. Create new Argo-project
-1. Update argo-destinations (settings => projects => infrastructure) with a new entry containing the new namespace fx ``https://kubernetes.default.svc
- | tenant ``
+    1. Update argo-destinations (settings => projects => infrastructure) with a new entry containing the new namespace fx ``https://kubernetes.default.svc | tenant ``
+    2. Add source repositories
+    3. Add * to Cluster Resource Allow list
+ 
 1. Make sure that all namespaces (that you wish to whitelist) has a label called `name` (value should be same name as namespace-name)
 1. Make sure that `kube-system`-namespace has a label called `name` with value; `kube-system`
 1. Syncronize in Argo!
