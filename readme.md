@@ -7,6 +7,7 @@
     1. Update argo-destinations (settings => projects => infrastructure) with a new entry containing the new namespace fx ``https://kubernetes.default.svc | tenant ``
     2. Add source repositories
     3. Add * to Cluster Resource Allow list
+    4. Add `infrastructure` to destinations
  
 1. Make sure that all namespaces (that you wish to whitelist) has a label called `name` (value should be same name as namespace-name)
 1. Make sure that `kube-system`-namespace has a label called `name` with value; `kube-system`
