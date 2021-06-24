@@ -92,6 +92,18 @@ allowInternetAccess : true #True if tennant should be able to reach internet
 ```
 For the tennant to be able to reach the world wide web, it needs to have this attribute set to true
 
+### `defalut limits and request`
+```yml
+default:
+  limits:
+    cpu: 10m
+    memory: 128Mi
+  request:
+    cpu: 5m
+    memory: 64Mi
+```
+For the tenant there is a default resources limit and request on CPU and memory. The default are used for pods whits no resources defined.
+
 # Deployments - Provide ressources!
 All deployments belonging to a namespace, that is limited by ressourceQuotas, needs to be allocated ressources. If this is not provided, the deployment will not go well.
 
