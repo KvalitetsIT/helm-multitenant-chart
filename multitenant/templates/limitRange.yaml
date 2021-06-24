@@ -19,10 +19,10 @@ spec:
       cpu: {{ $values.default.request.cpu }}
       memory: {{ $values.default.request.memory }}
       {{- else }}
-      cpu: 10m
+      cpu: 50m
       memory: 128Mi
     defaultRequest:
-      cpu: 5m
+      cpu: 50m
       memory: 64Mi
       {{- end }}
     type: Container

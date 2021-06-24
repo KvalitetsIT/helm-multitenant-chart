@@ -96,10 +96,10 @@ For the tennant to be able to reach the world wide web, it needs to have this at
 ```yml
 default:
   limits:
-    cpu: 10m
+    cpu: 50m
     memory: 128Mi
   request:
-    cpu: 5m
+    cpu: 50m
     memory: 64Mi
 ```
 For the tenant there is a default resources limit and request on CPU and memory. The default are used for pods whits no resources defined.
