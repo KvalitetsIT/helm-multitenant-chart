@@ -1,0 +1,32 @@
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+{{- if ($values.limits) }}
+#=================== LimitRange ===================
+apiVersion: v1
+kind: LimitRange
+metadata:
+  namespace: {{ $name }}
+  name: {{$name}}-limit-range
+  labels:
+    type: tenant
+spec:
+  limits:
+  - default:
+      {{- if ($values.default) }}
+      cpu: {{ $values.default.limits.cpu }}
+      memory: {{ $values.default.limits.memory }}
+    defaultRequest:
+      cpu: {{ $values.default.request.cpu }}
+      memory: {{ $values.default.request.memory }}
+      {{- else }}
+      cpu: 10m
+      memory: 128Mi
+    defaultRequest:
+      cpu: 5m
+      memory: 64Mi
+      {{- end }}
+    type: Container
+---
+{{ end }}
+{{ end }}
+{{ end }}

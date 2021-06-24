@@ -8,6 +8,14 @@ tennants:
       cpu: 1000
       memory: 200Gi
       longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
+
+    default:
+      limits:
+        cpu: 10m
+        memory: 128Mi
+      request:
+        cpu: 5m
+        memory: 64Mi
     allowInternetAccess : true
     ingressAllowedNamespaces:
       - DataStorageServices
