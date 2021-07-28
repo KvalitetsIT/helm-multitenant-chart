@@ -1,3 +1,4 @@
+{{- $numberOfTenants := len .Values.tennants}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 apiVersion: batch/v1
@@ -13,9 +14,9 @@ spec:
     spec:
       containers:
       - name: {{$name}}-networktests
-        image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/postman/newman:5-ubuntu
+        image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/kvalitetsit/kithosting-networkpolicytests
         command: ["run"]
-        args: ["https://www.getpostman.com/collections/7a8cc1c1799e031947f7","--reporters","cli","--reporter-cli-no-failures", "-n 2"]
+        args: ["/etc/newman/collection.json","--reporters","cli","--reporter-cli-no-failures"]
       restartPolicy: Never
 ---
 {{ end }}
