@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: {{$name}}-networktests
-        image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/kvalitetsit/kithosting-networkpolicytests
-        command: ["/bin/sh"]
-        args: ["run", "/etc/newman/collection.json","--reporters","cli","--reporter-cli-no-failures"]
+        image: postman/newman:alpine
+        command: ["run"]
+        args: ["/etc/newman/test.postman_collection.json","--reporters","cli","--reporter-cli-no-failures"]
       restartPolicy: Never
 ---
 {{ end }}
