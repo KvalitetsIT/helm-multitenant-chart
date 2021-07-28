@@ -16,7 +16,7 @@ spec:
       - name: {{$name}}-networktests
         image: postman/newman:alpine
         command: ["run"]
-        args: ["/etc/newman/test.postman_collection.json","--reporters","cli","--reporter-cli-no-failures"]
+        args: ["/etc/newman/collection.json"]
       restartPolicy: Never
 ---
 {{ end }}
