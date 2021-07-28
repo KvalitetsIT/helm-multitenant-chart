@@ -1,0 +1,22 @@
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{$name}}-networktests
+  namespace: {{$name}}
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      name: {{$name}}-networktests
+    spec:
+      containers:
+      - name: {{$name}}-networktests
+        image: postman/newman:alpine
+        command: ["run"]
+        args: ["https://www.getpostman.com/collections/7a8cc1c1799e031947f7","--reporters","cli","--reporter-cli-no-failures"]
+      restartPolicy: Never
+---
+{{ end }}
+{{ end }}
