@@ -15,8 +15,6 @@ spec:
       containers:
       - name: {{$name}}-networktests
         image: postman/newman:alpine
-        command: ["run"]
-        args: ["/etc/newman/collection.json"]
       restartPolicy: Never
 ---
 {{ end }}
