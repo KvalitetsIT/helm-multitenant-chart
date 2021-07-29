@@ -4,16 +4,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{$name}}-networktests_job
+  name: {{$name}}-networktests-job
   namespace: {{$name}}
 spec:
   parallelism: 1
   template:
     metadata:
-      name: {{$name}}-networktests_job
+      name: {{$name}}-networktests-job
     spec:
       containers:
-      - name: {{$name}}-networktests_job
+      - name: {{$name}}-networktests-job
         image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/kvalitetsit/kithosting-networkpolicytests
       restartPolicy: Never
 ---
