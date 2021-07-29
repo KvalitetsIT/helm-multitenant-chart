@@ -1,0 +1,21 @@
+{{- $numberOfTenants := len .Values.tennants}}
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{$name}}-networktests_job
+  namespace: {{$name}}
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      name: {{$name}}-networktests_job
+    spec:
+      containers:
+      - name: {{$name}}-networktests_job
+        image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/kvalitetsit/kithosting-networkpolicytests
+      restartPolicy: Never
+---
+{{ end }}
+{{ end }}
