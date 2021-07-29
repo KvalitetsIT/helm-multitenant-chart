@@ -7,6 +7,8 @@ metadata:
   name: {{$name}}-networktests
   namespace: {{$name}}
 spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   schedule: "0 6 * * *"
   jobTemplate:
     spec:
