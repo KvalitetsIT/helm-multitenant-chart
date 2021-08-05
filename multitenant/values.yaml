@@ -4,11 +4,13 @@ egressNetworksToBlock:
   - 10.0.16.0/20
 tennants:
 - test-from-helm-multitenant-repo:
+    source_repositories:
+      - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
+    allowInternetAccess : true
     limits:
       cpu: 1000
       memory: 200Gi
       longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
-
     default:
       limits:
         cpu: 10m
@@ -16,7 +18,6 @@ tennants:
       request:
         cpu: 5m
         memory: 64Mi
-    allowInternetAccess : true
     ingressAllowedNamespaces:
       - DataStorageServices
       - ingress-nginx

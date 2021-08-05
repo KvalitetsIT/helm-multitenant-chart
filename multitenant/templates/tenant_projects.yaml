@@ -1,0 +1,37 @@
+{{- $valuesAtStart := .Values}}
+
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+#=================== Namespace ===================
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{$name}}
+  namespace: {{$valuesAtStart.appnamespace}}
+  labels:
+    type: tenant-project
+spec:
+  # Project description
+  description: Project containing tenant-applications
+
+  # Allow manifests to deploy from any Git repos
+  sourceRepos:
+  {{- range $values.source_repositories }}
+    - '{{.}}'
+  {{ end }}
+
+  # Only permit applications to deploy to the guestbook namespace in the same cluster
+  destinations:
+  - namespace: {{$name}}
+    server: https://kubernetes.default.svc
+  - namespace: {{$valuesAtStart.appnamespace}}
+    server: https://kubernetes.default.svc
+
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+---
+{{ end }}
+{{ end }}
