@@ -52,6 +52,7 @@ spec:
           cp /grafana-tenant-scripts/*.sh /tmp
           echo "apply 'chmod +x' to /tmp/*.sh"
           chmod +x /tmp/*.sh
+          ls /tmp/
           echo "execute script-one.sh now"
           /tmp/script-one.sh
       restartPolicy: Never
