@@ -24,10 +24,16 @@ spec:
           - mountPath: /grafana-tenant-scripts
             name: grafana-tenant-scripts-volume
         env:
-          - name: adminUsername
-            value: "adUs"
           - name: adminPass
-            value: "adPas"
+            valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: grafana
+          - name: adminUsername
+            valueFrom:
+                secretKeyRef:
+                  key: admin-user
+                  name: grafana
           - name: grafanaUrl
             value: {{ $valuesAtStart.grafanaurl }}
           - name: tenantName
