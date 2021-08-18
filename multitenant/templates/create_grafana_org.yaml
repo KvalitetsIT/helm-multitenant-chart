@@ -1,7 +1,7 @@
-{{- $valuesAtStart := .Values}}
+{{- if (.Values.grafanaurl) }}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
-{{- if ($valuesAtStart.grafanaurl) }}
+
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,7 +19,7 @@ spec:
           name: grafana-tenant-scripts #hello-world-scripts
       containers:
       - name: grafana-{{ $name }}-job
-        image: dwdraju/alpine-curl-jq
+        image: cfmanteiga/alpine-bash-curl-jq
         volumeMounts:
           - mountPath: /grafana-tenant-scripts
             name: grafana-tenant-scripts-volume
@@ -54,7 +54,7 @@ spec:
 ---
 {{ end }}
 {{ end }}
-{{ end }}
+
 
 apiVersion: v1
 items:
@@ -138,3 +138,4 @@ items:
     name:  grafana-tenant-scripts
 kind: List
 metadata: {}
+{{ end }}
