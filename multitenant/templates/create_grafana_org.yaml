@@ -47,7 +47,7 @@ spec:
         - -c
         - |
           echo "scripts in /grafana-tenant-scripts"
-          ls -lh /grafana-tenant-scripts
+          ls /grafana-tenant-scripts
           echo "copy scripts to /tmp"
           cp /grafana-tenant-scripts/*.sh /tmp
           echo "apply 'chmod +x' to /tmp/*.sh"
