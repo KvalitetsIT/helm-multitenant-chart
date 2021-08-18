@@ -46,14 +46,8 @@ spec:
         - /bin/sh
         - -c
         - |
-          echo "scripts in /grafana-tenant-scripts"
-          ls -lh /grafana-tenant-scripts
-          echo "copy scripts to /tmp"
-          cp /grafana-tenant-scripts/*.sh /tmp
-          echo "apply 'chmod +x' to /tmp/*.sh"
-          chmod +x /tmp/*.sh
-          echo "execute script-one.sh now"
-          /tmp/script-one.sh
+          echo "running script-one.sh in /grafana-tenant-scripts"
+          /grafana-tenant-scripts/script-one.sh
       restartPolicy: Never
 ---
 {{ end }}
@@ -99,7 +93,7 @@ items:
       then
         #==========================STOP IF CREATED=================================
         echo "${tenantName} already exists! :-("
-        exit 1;
+        exit 0;
       elif [ $http_code != 200 ]
       then
         #==========================STOP IF SOME OTHER ERROR=================================
