@@ -4,20 +4,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: grafana-tenant-job
+  name: grafana-{{ $name }}-job
 spec:
   parallelism: 1
   completions: 1
   template:
     metadata:
-      name: grafana-tenant-job
+      name: grafana-{{ $name }}-job
     spec:
       volumes:
       - name: grafana-tenant-scripts-volume #hello-world-scripts-volume
         configMap:
           name: grafana-tenant-scripts #hello-world-scripts
       containers:
-      - name: grafana-tenant-job
+      - name: grafana-{{ $name }}-job
         image: alpine
         volumeMounts:
           - mountPath: /grafana-tenant-scripts
@@ -45,6 +45,10 @@ spec:
           /tmp/script-one.sh
       restartPolicy: Never
 ---
+{{ end }}
+{{ end }}
+{{ end }}
+
 apiVersion: v1
 items:
 - apiVersion: v1
@@ -127,7 +131,3 @@ items:
     name:  grafana-tenant-scripts
 kind: List
 metadata: {}
----
-{{ end }}
-{{ end }}
-{{ end }}
