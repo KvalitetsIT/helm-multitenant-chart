@@ -12,7 +12,7 @@ metadata:
     type: tenant-project
 spec:
   # Project description
-  description: Project containing tenant-applications
+  description: Project containing applications for {{$name}}
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:
