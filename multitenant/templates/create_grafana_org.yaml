@@ -21,7 +21,8 @@ spec:
           name: grafana-tenant-scripts #hello-world-scripts
       containers:
       - name: grafana-{{ $name }}-job
-        image: cfmanteiga/alpine-bash-curl-jq
+        image: imega/jq
+        tag: 1.6
         volumeMounts:
           - mountPath: /grafana-tenant-scripts
             name: grafana-tenant-scripts-volume
@@ -67,9 +68,6 @@ items:
   data:
     script-one.sh: |
       #!/bin/bash
-
-      apk add curl
-      apk add jq
 
       echo "=========="
       #Varaibles
