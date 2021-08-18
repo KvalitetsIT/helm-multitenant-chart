@@ -1,0 +1,133 @@
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+{{- if ($values.limits) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: grafana-tenant-job
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      name: grafana-tenant-job
+    spec:
+      volumes:
+      - name: grafana-tenant-scripts-volume #hello-world-scripts-volume
+        configMap:
+          name: grafana-tenant-scripts #hello-world-scripts
+      containers:
+      - name: grafana-tenant-job
+        image: alpine
+        volumeMounts:
+          - mountPath: /grafana-tenant-scripts
+            name: grafana-tenant-scripts-volume
+        env:
+          - name: adminUsername
+            value: "adUs"
+          - name: adminPass
+            value: "adPas"
+          - name: grafanaUrl
+            value: "grafUrl"
+          - name: tenantName
+            value: {{ $name }}
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "scripts in /grafana-tenant-scripts"
+          ls -lh /grafana-tenant-scripts
+          echo "copy scripts to /tmp"
+          cp /grafana-tenant-scripts/*.sh /tmp
+          echo "apply 'chmod +x' to /tmp/*.sh"
+          chmod +x /tmp/*.sh
+          echo "execute script-one.sh now"
+          /tmp/script-one.sh
+      restartPolicy: Never
+---
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    script-one.sh: |
+      #Varaibles
+      tenantName=$tenantName
+      admin_user=$adminUsername
+      admin_pass=$adminPass
+      url=$grafanaUrl
+
+      echo "tenantName: $tenantName"
+      echo "admin_user: $admin_user"
+      echo "admin_pass: $(echo $admin_pass | head -c-40)..."
+      echo "url: $url"
+      echo "=========="
+
+      #==========================DASHBOARDS=================================
+      lokiQuicksearchDashboard="{ \"annotations\": { \"list\": [ { \"builtIn\": 1, \"datasource\": \"-- Grafana --\", \"enable\": true, \"hide\": true, \"iconColor\": \"rgba(0, 211, 255, 1)\", \"name\": \"Annotations & Alerts\", \"type\": \"dashboard\" } ] }, \"description\": \"Loki logs panel with prometheus variables \", \"editable\": true, \"gnetId\": 12019, \"graphTooltip\": 0, \"id\": null, \"iteration\": 1629266148215, \"links\": [], \"panels\": [ { \"aliasColors\": {}, \"bars\": false, \"dashLength\": 10, \"dashes\": false, \"datasource\": \"Loki\", \"fieldConfig\": { \"defaults\": { \"links\": [] }, \"overrides\": [] }, \"fill\": 1, \"fillGradient\": 0, \"gridPos\": { \"h\": 9, \"w\": 24, \"x\": 0, \"y\": 0 }, \"hiddenSeries\": false, \"id\": 4, \"legend\": { \"alignAsTable\": false, \"avg\": false, \"current\": true, \"hideEmpty\": true, \"hideZero\": true, \"max\": false, \"min\": false, \"rightSide\": false, \"show\": false, \"total\": false, \"values\": true }, \"lines\": true, \"linewidth\": 1, \"nullPointMode\": \"null\", \"options\": { \"alertThreshold\": true }, \"percentage\": false, \"pluginVersion\": \"7.5.3\", \"pointradius\": 2, \"points\": false, \"renderer\": \"flot\", \"seriesOverrides\": [], \"spaceLength\": 10, \"stack\": false, \"steppedLine\": false, \"targets\": [ { \"expr\": \"sum(rate({namespace=~\\\"$namespace\\\",app=~\\\"$app\\\", level=~\\\"$level\\\"} |= \\\"$search\\\" [5m] )) by (namespace,app,pod)\", \"refId\": \"A\" } ], \"thresholds\": [], \"timeFrom\": null, \"timeRegions\": [], \"timeShift\": null, \"title\": \"Log rate\", \"tooltip\": { \"shared\": false, \"sort\": 0, \"value_type\": \"individual\" }, \"type\": \"graph\", \"xaxis\": { \"buckets\": null, \"mode\": \"time\", \"name\": null, \"show\": true, \"values\": [] }, \"yaxes\": [ { \"format\": \"short\", \"label\": null, \"logBase\": 1, \"max\": null, \"min\": null, \"show\": true }, { \"format\": \"short\", \"label\": null, \"logBase\": 1, \"max\": null, \"min\": null, \"show\": false } ], \"yaxis\": { \"align\": false, \"alignLevel\": null } }, { \"datasource\": \"Loki\", \"fieldConfig\": { \"defaults\": {}, \"overrides\": [] }, \"gridPos\": { \"h\": 30, \"w\": 24, \"x\": 0, \"y\": 9 }, \"id\": 2, \"maxDataPoints\": \"\", \"options\": { \"dedupStrategy\": \"none\", \"showLabels\": false, \"showTime\": true, \"sortOrder\": \"Descending\", \"wrapLogMessage\": true }, \"targets\": [ { \"expr\": \"{namespace=~\\\"$namespace\\\",app=~\\\"$app\\\", level=~\\\"$level\\\"} |= \\\"$search\\\" \", \"refId\": \"A\" } ], \"timeFrom\": null, \"timeShift\": null, \"title\": \"Logs Panel\", \"type\": \"logs\" } ], \"refresh\": false, \"schemaVersion\": 27, \"style\": \"dark\", \"tags\": [], \"templating\": { \"list\": [ { \"allValue\": \".*\", \"current\": { \"selected\": false, \"text\": \"All\", \"value\": \"$__all\" }, \"datasource\": \"prometheus\", \"definition\": \"label_values(namespace)\", \"description\": null, \"error\": null, \"hide\": 0, \"includeAll\": true, \"label\": null, \"multi\": false, \"name\": \"namespace\", \"options\": [], \"query\": { \"query\": \"label_values(namespace)\", \"refId\": \"prometheus-namespace-Variable-Query\" }, \"refresh\": 1, \"regex\": \"\", \"skipUrlSync\": false, \"sort\": 1, \"tagValuesQuery\": \"\", \"tags\": [], \"tagsQuery\": \"\", \"type\": \"query\", \"useTags\": false }, { \"allValue\": \".*\", \"current\": { \"selected\": true, \"text\": [ \"All\" ], \"value\": [ \"$__all\" ] }, \"datasource\": \"Loki\", \"definition\": \"label_values(app)\", \"description\": null, \"error\": null, \"hide\": 0, \"includeAll\": true, \"label\": \"app\", \"multi\": true, \"name\": \"app\", \"options\": [], \"query\": \"label_values(app)\", \"refresh\": 2, \"regex\": \"\", \"skipUrlSync\": false, \"sort\": 1, \"tagValuesQuery\": \"\", \"tags\": [], \"tagsQuery\": \"\", \"type\": \"query\", \"useTags\": false }, { \"allValue\": \".*\", \"current\": { \"selected\": true, \"text\": [ \"All\" ], \"value\": [ \"$__all\" ] }, \"datasource\": \"prometheus\", \"definition\": \"label_values(pod)\", \"description\": null, \"error\": null, \"hide\": 2, \"includeAll\": true, \"label\": null, \"multi\": true, \"name\": \"pod\", \"options\": [], \"query\": { \"query\": \"label_values(pod)\", \"refId\": \"prometheus-pod-Variable-Query\" }, \"refresh\": 2, \"regex\": \"\", \"skipUrlSync\": false, \"sort\": 0, \"tagValuesQuery\": \"\", \"tags\": [], \"tagsQuery\": \"\", \"type\": \"query\", \"useTags\": false }, { \"allValue\": \".*\", \"current\": { \"selected\": true, \"text\": [ \"All\" ], \"value\": [ \"$__all\" ] }, \"datasource\": \"Loki\", \"definition\": \"label_values(level)\", \"description\": null, \"error\": null, \"hide\": 0, \"includeAll\": true, \"label\": \"level\", \"multi\": true, \"name\": \"level\", \"options\": [], \"query\": \"label_values(level)\", \"refresh\": 2, \"regex\": \"\", \"skipUrlSync\": false, \"sort\": 0, \"tagValuesQuery\": \"\", \"tags\": [], \"tagsQuery\": \"\", \"type\": \"query\", \"useTags\": false }, { \"current\": { \"selected\": false, \"text\": \"\", \"value\": \"\" }, \"description\": null, \"error\": null, \"hide\": 0, \"label\": null, \"name\": \"search\", \"options\": [ { \"selected\": true, \"text\": \"\", \"value\": \"\" } ], \"query\": \"\", \"skipUrlSync\": false, \"type\": \"textbox\" } ] }, \"time\": { \"from\": \"now-30m\", \"to\": \"now\" }, \"timepicker\": { \"refresh_intervals\": [ \"5s\", \"10s\", \"30s\", \"1m\", \"5m\", \"15m\", \"30m\", \"1h\", \"2h\", \"1d\" ] }, \"timezone\": \"\", \"title\": \"Loki Dashboard quick search\", \"uid\": \"liz0yRCZz\", \"version\": 1 }"
+
+      dashboards="[${lokiQuicksearchDashboard},${prometheusStatsDashboard}]"
+
+
+      #==========================CREATE ORGANISATION=================================
+      createOrgResponse=$(curl -s -w "%{http_code}" -X POST -H "Content-Type: application/json" -d "{\"name\":\"$tenantName\"}" https://$admin_user:$admin_pass@$url/api/orgs)
+
+      http_code=${createOrgResponse: -3} # get the last 3 digits
+      echo "- Create org: ${createOrgResponse}"
+
+      if [ $http_code -eq 409 ]
+      then
+        #==========================STOP IF CREATED=================================
+        echo "${tenantName} already exists! :-("
+        exit 1;
+      elif [ $http_code -nq 200 ]
+      then
+        #==========================STOP IF SOME OTHER ERROR=================================
+        echo " something went wrong creating ${tenantName}. Result; ${createOrgResponse} ! :-("
+        exit 1;
+      fi
+
+      #==========================IF NOT ALREADY CREATED=================================
+
+      # Add admin to new organisation
+      orgId=$(echo ${createOrgResponse} | head -c-4 | jq -r '.orgId')  # get all but the last 3 digits
+      addUserToNewOrgResponseCode=$(curl --write-out '%{http_code}' --silent  -X POST -H "Content-Type: application/json" -d "{\"loginOrEmail\":\"$tenantName\",\"role\":\"Admin\"}" https://$admin_user:$admin_pass@$url/api/orgs/$orgId)
+      echo "- Add $admin_user to org $orgId : ${addUserToNewOrgResponseCode}"
+
+      # Switch organisation to new one
+      switchContextResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" https://$admin_user:$admin_pass@$url/api/user/using/$orgId)
+      echo "- context-switching: ${switchContextResult}"
+
+      # Create api key
+      createApiKeyResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" -d "{\"name\":\"apikeycurl\",\"role\":\"Admin\"}" https://$admin_user:$admin_pass@$url/api/auth/keys)
+      apikey=$(echo ${createApiKeyResult} | head -c-4 | jq -r '.key')  # get all but the last 3 digits
+      echo "- Apikey: ${createApiKeyResult}"
+
+      # Create datasource
+      createLokiDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"Loki\",\"type\":\"loki\",\"url\":\"http://${tenantName}-loki.${tenantName}.svc.cluster.local:3100\",\"access\":\"proxy\",\"basicAuth\":false}" https://$url/api/datasources)
+      echo "- Loki: ${createLokiDatasourceResult}"
+
+      createPrometheusDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"url\":\"http://${tenantName}-prometheus-server.${tenantName}.svc.cluster.local\",\"access\":\"proxy\",\"basicAuth\":false}" https://$url/api/datasources)
+      echo "- Prometheus: ${createPrometheusDatasourceResult}"
+
+      # Create dashboard
+      for dashboard in $(echo "${dashboards}" | jq -r '.[] | @base64'); do
+          _jq() {
+           echo ${dashboard} | base64 --decode | jq -r ${1}
+          }
+
+          dashboardUrl="https://$url/api/dashboards/db"
+          createDashboardResult=$(curl --write-out '%{http_code}' --silent  -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"dashboard\": $(_jq)}" $dashboardUrl)
+          echo "- Create dashboard ($(_jq '.title')): ${createDashboardResult}"
+
+      done
+
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name:  grafana-tenant-scripts
+kind: List
+metadata: {}
+---
+{{ end }}
+{{ end }}
+{{ end }}
