@@ -92,7 +92,7 @@ items:
         #==========================STOP IF CREATED=================================
         echo "${tenantName} already exists! :-("
         exit 1;
-      elif [ $http_code -nq 200 ]
+      elif [ $http_code != 200 ]
       then
         #==========================STOP IF SOME OTHER ERROR=================================
         echo " something went wrong creating ${tenantName}. Result; ${createOrgResponse} ! :-("
