@@ -1,6 +1,7 @@
+{{- $valuesAtStart := .Values}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
-{{- if ($values.limits) }}
+{{- if ($valuesAtStart.grafana-url) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -28,7 +29,7 @@ spec:
           - name: adminPass
             value: "adPas"
           - name: grafanaUrl
-            value: "grafUrl"
+            value: {{ $valuesAtStart.grafana-url }}
           - name: tenantName
             value: {{ $name }}
         command:
