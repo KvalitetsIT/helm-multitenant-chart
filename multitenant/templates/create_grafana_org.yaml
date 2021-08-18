@@ -1,4 +1,6 @@
-{{- if (.Values.grafanaurl) }}
+
+{{- $valuesAtStart := .Values}}
+{{- if ($valuesAtStart.grafanaurl) }}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 
