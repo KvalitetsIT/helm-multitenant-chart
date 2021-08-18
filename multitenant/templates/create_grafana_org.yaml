@@ -21,7 +21,7 @@ spec:
           name: grafana-tenant-scripts #hello-world-scripts
       containers:
       - name: grafana-{{ $name }}-job
-        image: cfmanteiga/alpine-bash-curl-jq
+        image: dwdraju/alpine-curl-jq
         volumeMounts:
           - mountPath: /grafana-tenant-scripts
             name: grafana-tenant-scripts-volume
