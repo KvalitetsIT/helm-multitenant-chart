@@ -133,7 +133,7 @@ items:
       # Create dashboard
       for dashboard in $(echo "${dashboards}" | jq -r '.[] | @base64'); do
           _jq() {
-           echo ${dashboard} | base64 --decode | jq -r ${1}
+           echo ${dashboard} | base64 -d | jq -r ${1}
           }
 
           dashboardUrl="${protocol}://${url}/api/dashboards/db"
