@@ -105,23 +105,23 @@ items:
 
       # Add admin to new organisation
       orgId=$(echo ${createOrgResponse} | head -c-4 | jq -r '.orgId')  # get all but the last 3 digits
-      addUserToNewOrgResponseCode=$(curl --write-out '%{http_code}' --silent  -X POST -H "Content-Type: application/json" -d "{\"loginOrEmail\":\"$tenantName\",\"role\":\"Admin\"}" $protocol$admin_user:$admin_pass@$url/api/orgs/$orgId)
+      addUserToNewOrgResponseCode=$(curl --write-out '%{http_code}' --silent  -X POST -H "Content-Type: application/json" -d "{\"loginOrEmail\":\"$tenantName\",\"role\":\"Admin\"}" ${protocol}://${admin_user}:$admin_pass@$url/api/orgs/$orgId)
       echo "- Add $admin_user to org $orgId : ${addUserToNewOrgResponseCode}"
 
       # Switch organisation to new one
-      switchContextResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" $protocol$admin_user:$admin_pass@$url/api/user/using/$orgId)
+      switchContextResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" ${protocol}://${admin_user}:$admin_pass@$url/api/user/using/$orgId)
       echo "- context-switching: ${switchContextResult}"
 
       # Create api key
-      createApiKeyResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" -d "{\"name\":\"apikeycurl\",\"role\":\"Admin\"}" $protocol$admin_user:$admin_pass@$url/api/auth/keys)
+      createApiKeyResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" -d "{\"name\":\"apikeycurl\",\"role\":\"Admin\"}" ${protocol}://${admin_user}:$admin_pass@$url/api/auth/keys)
       apikey=$(echo ${createApiKeyResult} | head -c-4 | jq -r '.key')  # get all but the last 3 digits
       echo "- Apikey: ${createApiKeyResult}"
 
       # Create datasource
-      createLokiDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"Loki\",\"type\":\"loki\",\"url\":\"http://${tenantName}-loki.${tenantName}.svc.cluster.local:3100\",\"access\":\"proxy\",\"basicAuth\":false}" $protocol$url/api/datasources)
+      createLokiDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"Loki\",\"type\":\"loki\",\"url\":\"http://${tenantName}-loki.${tenantName}.svc.cluster.local:3100\",\"access\":\"proxy\",\"basicAuth\":false}" ${protocol}://${url}/api/datasources)
       echo "- Loki: ${createLokiDatasourceResult}"
 
-      createPrometheusDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"url\":\"http://${tenantName}-prometheus-server.${tenantName}.svc.cluster.local\",\"access\":\"proxy\",\"basicAuth\":false}" $protocol$url/api/datasources)
+      createPrometheusDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"url\":\"http://${tenantName}-prometheus-server.${tenantName}.svc.cluster.local\",\"access\":\"proxy\",\"basicAuth\":false}" ${protocol}://${url}/api/datasources)
       echo "- Prometheus: ${createPrometheusDatasourceResult}"
 
       # Create dashboard
@@ -130,7 +130,7 @@ items:
            echo ${dashboard} | base64 --decode | jq -r ${1}
           }
 
-          dashboardUrl="$protocol$url/api/dashboards/db"
+          dashboardUrl="${protocol}://${url}/api/dashboards/db"
           createDashboardResult=$(curl --write-out '%{http_code}' --silent  -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"dashboard\": $(_jq)}" $dashboardUrl)
           echo "- Create dashboard ($(_jq '.title')): ${createDashboardResult}"
 
