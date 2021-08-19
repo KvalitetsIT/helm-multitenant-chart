@@ -1,0 +1,147 @@
+
+{{- $valuesAtStart := .Values}}
+{{- if ($valuesAtStart.grafanaurl) }}
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: grafana-{{ $name }}-job
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      name: grafana-{{ $name }}-job
+    spec:
+      volumes:
+      - name: grafana-tenant-scripts-volume #hello-world-scripts-volume
+        configMap:
+          name: grafana-tenant-scripts #hello-world-scripts
+      containers:
+      - name: grafana-{{ $name }}-job
+        image: dwdraju/alpine-curl-jq
+        volumeMounts:
+          - mountPath: /grafana-tenant-scripts
+            name: grafana-tenant-scripts-volume
+        envFrom:
+          - configMapRef:
+              name: grafana-tenant-dashboards # defined in grafana_dashboards.yaml
+        env:
+          - name: adminPass
+            valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: grafana
+          - name: adminUsername
+            valueFrom:
+                secretKeyRef:
+                  key: admin-user
+                  name: grafana
+          - name: grafanaUrl
+            value: {{ $valuesAtStart.grafanaurl }}
+          - name: grafanaprotocol
+            value: http
+          - name: tenantName
+            value: {{ $name }}
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "scripts in /grafana-tenant-scripts"
+          ls /grafana-tenant-scripts
+          echo "copy scripts to /tmp"
+          cp /grafana-tenant-scripts/*.sh /tmp
+          echo "apply 'chmod +x' to /tmp/*.sh"
+          chmod +x /tmp/*.sh
+          ls /tmp/
+          echo "executing createorg.sh"
+          /tmp/createorg.sh
+      restartPolicy: Never
+---
+{{ end }}
+{{ end }}
+
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    createorg.sh: |
+      #!/bin/bash
+
+      echo "=========="
+      #Varaibles
+      tenantName=$tenantName
+      admin_user=$adminUsername
+      admin_pass=$adminPass
+      url=$grafanaUrl
+      protocol=$grafanaprotocol
+
+      echo "tenantName: $tenantName"
+      echo "admin_user: $admin_user"
+      echo "admin_pass: $(echo $admin_pass | head -c-40)..."
+      echo "url: $url"
+      echo "protocol: $protocol"
+      echo "=========="
+
+      #==========================CREATE ORGANISATION=================================
+      createOrgResponse=$(curl -s -w "%{http_code}" -X POST -H "Content-Type: application/json" -d "{\"name\":\"$tenantName\"}" $protocol://$admin_user:$admin_pass@$url/api/orgs)
+
+      http_code=${createOrgResponse: -3} # get the last 3 digits
+      echo "- Create org: ${createOrgResponse}"
+
+      if [ $http_code -eq 409 ]
+      then
+        #==========================STOP IF CREATED=================================
+        echo "${tenantName} already exists! :-("
+        exit 0;
+      elif [ $http_code != 200 ]
+      then
+        #==========================STOP IF SOME OTHER ERROR=================================
+        echo " something went wrong creating ${tenantName}. Result; ${createOrgResponse} ! :-("
+        exit 1;
+      fi
+
+      #==========================IF NOT ALREADY CREATED=================================
+
+      # Add admin to new organisation
+      orgId=$(echo ${createOrgResponse} | head -c-4 | jq -r '.orgId')  # get all but the last 3 digits
+      addUserToNewOrgResponseCode=$(curl --write-out '%{http_code}' --silent  -X POST -H "Content-Type: application/json" -d "{\"loginOrEmail\":\"$tenantName\",\"role\":\"Admin\"}" ${protocol}://${admin_user}:$admin_pass@$url/api/orgs/$orgId)
+      echo "- Add $admin_user to org $orgId : ${addUserToNewOrgResponseCode}"
+
+      # Switch organisation to new one
+      switchContextResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" ${protocol}://${admin_user}:$admin_pass@$url/api/user/using/$orgId)
+      echo "- context-switching: ${switchContextResult}"
+
+      # Create api key
+      createApiKeyResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Content-Type: application/json" -d "{\"name\":\"apikeycurl\",\"role\":\"Admin\"}" ${protocol}://${admin_user}:$admin_pass@$url/api/auth/keys)
+      apikey=$(echo ${createApiKeyResult} | head -c-4 | jq -r '.key')  # get all but the last 3 digits
+      echo "- Apikey: ${createApiKeyResult}"
+
+      # Create datasource
+      createLokiDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"Loki\",\"type\":\"loki\",\"url\":\"http://${tenantName}-loki.${tenantName}.svc.cluster.local:3100\",\"access\":\"proxy\",\"basicAuth\":false}" ${protocol}://${url}/api/datasources)
+      echo "- Loki: ${createLokiDatasourceResult}"
+
+      createPrometheusDatasourceResult=$(curl --write-out '%{http_code}' --silent -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"url\":\"http://${tenantName}-prometheus-server.${tenantName}.svc.cluster.local\",\"access\":\"proxy\",\"basicAuth\":false}" ${protocol}://${url}/api/datasources)
+      echo "- Prometheus: ${createPrometheusDatasourceResult}"
+
+      # Create dashboard
+      for dashboard in $(echo "${dashboards}" | jq -r '.[] | @base64'); do
+          _jq() {
+           echo ${dashboard} | base64 -d
+          }
+
+          dashboardUrl="${protocol}://${url}/api/dashboards/db"
+          createDashboardResult=$(curl --write-out '%{http_code}' --silent  -X POST -H "Authorization: Bearer $apikey" -H "Content-Type: application/json" -d "{\"dashboard\": $(_jq)}" $dashboardUrl)
+          echo "- Create dashboard ($(_jq '.title')): ${createDashboardResult}"
+
+      done
+
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name:  grafana-tenant-scripts
+kind: List
+metadata: {}
+{{ end }}
