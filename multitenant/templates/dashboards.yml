@@ -1,0 +1,17 @@
+{{- $valuesAtStart := .Values}}
+{{- if ($valuesAtStart.grafanaurl) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-tenant-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+  dashboards: |
+  {{ "[" | nindent 4 }}
+{{- range $path, $_ :=  .Files.Glob  "dashboards-all/**.json" }}
+   {{ $.Files.Get $path | nindent 4 }},
+{{ end }}
+{{ "]" | nindent 4 }}
+
+{{- end }}
