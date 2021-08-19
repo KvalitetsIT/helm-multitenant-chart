@@ -1,3 +1,5 @@
+{{- define "labels" }}from: mychart{{ end }}
+{{ $firstIteration := 1}}
 {{- $valuesAtStart := .Values}}
 {{- if ($valuesAtStart.grafanaurl) }}
 apiVersion: v1
@@ -8,10 +10,14 @@ metadata:
     grafana_dashboard: "1"
 data:
   dashboards: |
-  {{ "[" | nindent 4 }}
+  {{- "[" | nindent 4 }}
 {{- range $path, $_ :=  .Files.Glob  "dashboards-all/**.json" }}
-   {{ $.Files.Get $path | nindent 4 }},
-{{ end }}
-{{ "]" | nindent 4 }}
+    {{- if eq $firstIteration 0}}
+    ,
+    {{- end }}
+  {{- $.Files.Get $path | nindent 4 }}
+ {{ $firstIteration = 0}}
+{{- end }}
+{{- "]" | nindent 4 }}
 
 {{- end }}
