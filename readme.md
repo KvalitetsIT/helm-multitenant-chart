@@ -56,6 +56,7 @@ egressNetworksToBlock: #If allowInternetAccess is true, what networks should we 
   - 10.0.16.0/20
 tennants: 
 - test-from-helm-multitenant-repo: #This will be the name of the namespace
+    dockerconfigjson: sdfsjhfjshrghesg... #Optinal - value of encrypted Sealed Secret
     limits: #Can be removed to remove limits
       cpu: 1000 #This is the number of allocated VCPU's (1000 is alot of vcpu's)
       memory: 200Gi
@@ -73,7 +74,6 @@ sharedServices:
 - login-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     
-dockerconfigjson: sdfsjhfjshrghesg...
     
 ```
 ### `ingressAllowedNamespaces` and `egressAllowedNamespaces`
@@ -110,7 +110,7 @@ For the tenant there is a default resources limit and request on CPU and memory.
 ```yml
 dockerconfigjson: sdfsjhfjshrghesg...
 ```
-If an image pull secret is needed in all namespaces. Then a sealed secret with the dockerconfigjson is created with the value in dockerconfigjson.
+If a docker config json is needed in a namespace ex. for imagePullSecret. Then a sealed secret with the dockerconfigjson is created with the value in dockerconfigjson.
 
 # Deployments - Provide ressources!
 All deployments belonging to a namespace, that is limited by ressourceQuotas, needs to be allocated ressources. If this is not provided, the deployment will not go well.
