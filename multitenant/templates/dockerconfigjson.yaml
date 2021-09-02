@@ -1,0 +1,22 @@
+{{- if (.Values.dockerconfigjson) }}
+{{- $valuesAtStart := .Values}}
+
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: {{ $values.dockerconfigjsonName | default "dockerHubProxy" }}
+  namespace: {{ $name }}
+spec:
+  encryptedData:
+    .dockerconfigjson: {{ $valuesAtStart.dockerconfigjson  }}
+  template:
+    metadata:
+      name: {{ $values.dockerhubProxySecret | default "dockerhubProxy" }}
+      namespace: {{ $name }}
+    type: kubernetes.io/dockerconfigjson
+---
+{{ end }}
+{{ end }}
+{{ end }}

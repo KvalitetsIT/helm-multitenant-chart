@@ -73,6 +73,8 @@ sharedServices:
 - login-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     
+dockerconfigjson: sdfsjhfjshrghesg...
+    
 ```
 ### `ingressAllowedNamespaces` and `egressAllowedNamespaces`
 ```yml
@@ -103,6 +105,12 @@ default:
     memory: 64Mi
 ```
 For the tenant there is a default resources limit and request on CPU and memory. The default are used for pods whits no resources defined.
+
+### `dockerconfigjson`
+```yml
+dockerconfigjson: sdfsjhfjshrghesg...
+```
+If an image pull secret is needed in all namespaces. Then a sealed secret with the dockerconfigjson is created with the value in dockerconfigjson.
 
 # Deployments - Provide ressources!
 All deployments belonging to a namespace, that is limited by ressourceQuotas, needs to be allocated ressources. If this is not provided, the deployment will not go well.
