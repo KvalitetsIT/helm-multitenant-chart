@@ -30,3 +30,7 @@ sharedServices:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
 - login-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
+
+networkTest:
+  image: kvalitetsit/kithosting-networkpolicytests
+  tag: "0.0.1"

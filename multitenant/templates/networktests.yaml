@@ -16,7 +16,7 @@ spec:
         spec:
           containers:
             - name: {{$name}}-networktests
-              image: dockerregistry.t0.hosting.kitkube.dk/dockerhub-proxy/kvalitetsit/kithosting-networkpolicytests
+              image: {{$.Values.networkTest.image}}:{{$.Values.networkTest.tag}}
           restartPolicy: Never
 ---
 {{ end }}
