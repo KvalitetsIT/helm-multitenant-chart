@@ -19,6 +19,7 @@ spec:
   policyTypes:
   - Ingress
   - Egress
+{{- if and (not ($values.denyAllNetwork)) (not $values.denyAllNetwork) }}
   ingress:
   - from:
     - ipBlock:
@@ -51,6 +52,7 @@ spec:
           {{- range $toBlock := $valuesAtStart.egressNetworksToBlock }}
           - {{ $toBlock  }}
           {{- end}}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

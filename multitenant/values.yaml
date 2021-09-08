@@ -7,6 +7,7 @@ tennants:
     source_repositories:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     allowInternetAccess : true
+    denyAllNetwork: true
     limits:
       cpu: 1000
       memory: 200Gi

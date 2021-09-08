@@ -90,7 +90,12 @@ The values-file contains two lists; egressAllowedNamespaces and ingressAllowedNa
 ### `allowInternetAccess`
 ```yml
 allowInternetAccess : true #True if tennant should be able to reach internet
+```
+For the tennant to be able to reach the world wide web, it needs to have this attribute set to true
 
+### `denyAllNetwork`
+```yml
+denyAllNetwork : true #True if alle network in and out of tennant is blocked and between pod in tennant
 ```
 For the tennant to be able to reach the world wide web, it needs to have this attribute set to true
 
