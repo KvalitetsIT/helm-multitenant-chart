@@ -1,21 +1,24 @@
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 
-{{- if ($values.dockerconfigjson) }}
+{{- if ($values.dockerconfig) }}
+{{- range $id, $val := $values.dockerconfig}}
+
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
-  name: {{ $values.dockerconfigjsonName | default "pullSecret" }}
+  name: {{ $id }}
   namespace: {{ $name }}
 spec:
   encryptedData:
-    .dockerconfigjson: {{ $values.dockerconfigjson  }}
+    .dockerconfigjson: {{ $val.json  }}
   template:
     metadata:
-      name: {{ $values.dockerhubProxySecret | default "dockerhubProxy" }}
+      name: {{ $id }}
       namespace: {{ $name }}
     type: kubernetes.io/dockerconfigjson
 ---
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}

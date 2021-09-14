@@ -113,9 +113,11 @@ For the tenant there is a default resources limit and request on CPU and memory.
 
 ### `dockerconfigjson`
 ```yml
-dockerconfigjson: sdfsjhfjshrghesg...
+dockerconfig:
+  nameOfSecret:
+    json: sdfsjhfjshrghesg...
 ```
-If a docker config json is needed in a namespace ex. for imagePullSecret. Then a sealed secret with the dockerconfigjson is created with the value in dockerconfigjson.
+If a docker config json is needed in a namespace ex. for imagePullSecret. Then a sealed secret with the dockerconfigjson is created with the value in json.
 
 # Deployments - Provide ressources!
 All deployments belonging to a namespace, that is limited by ressourceQuotas, needs to be allocated ressources. If this is not provided, the deployment will not go well.
