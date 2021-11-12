@@ -119,6 +119,10 @@ dockerconfig:
 ```
 If a docker config json is needed in a namespace ex. for imagePullSecret. Then a sealed secret with the dockerconfigjson is created with the value in json.
 
+```
+kubectl create secret docker-registry nameOfSecret -o yaml --dry-run=client --docker-server=dockerregistry...dk --docker-username="robot+docker" --docker-password=... -n .... | kubeseal --format yaml --cert https://sealed-secrets.hosting.kitkube.dk/v1/cert.pem
+```
+
 # Deployments - Provide ressources!
 All deployments belonging to a namespace, that is limited by ressourceQuotas, needs to be allocated ressources. If this is not provided, the deployment will not go well.
 
