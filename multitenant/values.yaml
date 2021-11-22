@@ -4,11 +4,6 @@ egressNetworksToBlock:
   - 10.0.16.0/20
 tennants:
 - test-from-helm-multitenant-repo:
-    dockerconfig:
-      kithosting:
-        json: asdasdas
-      b:
-        json: 1234
     source_repositories:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     allowInternetAccess : true

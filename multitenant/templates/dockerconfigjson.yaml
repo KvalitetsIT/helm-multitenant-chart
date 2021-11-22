@@ -22,3 +22,31 @@ spec:
 {{ end }}
 {{ end }}
 {{ end }}
+
+{{- $valuesAtStart := .Values}}
+
+{{- range .Values.sharedServices }}
+{{- range $name, $values := . }}
+
+{{- if ($values.dockerconfig) }}
+{{- range $id, $val := $values.dockerconfig}}
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: {{ $id }}
+  namespace: {{ $name }}
+spec:
+  encryptedData:
+    .dockerconfigjson: {{ $val.json  }}
+  template:
+    metadata:
+      name: {{ $id }}
+      namespace: {{ $name }}
+    type: kubernetes.io/dockerconfigjson
+
+
+---
+{{ end }}
+{{ end }}
+{{ end }}
+{{ end }}
