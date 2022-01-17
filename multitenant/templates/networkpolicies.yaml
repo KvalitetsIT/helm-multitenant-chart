@@ -33,6 +33,12 @@ spec:
           name: {{ $allowedIngress }}
 {{- end }}
   egress:
+  - to: # nodeLocal DNS
+      - ipBlock:
+          cidr: 169.254.20.10/32
+    ports:
+      - port: 53
+        protocol: UDP
   - to:
     - namespaceSelector:
         matchLabels:
