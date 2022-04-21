@@ -22,8 +22,6 @@ spec:
 {{- if and (not ($values.denyAllNetwork)) (not $values.denyAllNetwork) }}
   ingress:
   - from:
-    - ipBlock:
-        cidr: 10.0.0.0/20
     - namespaceSelector:
         matchLabels:
           name: {{ $name }}
