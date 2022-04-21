@@ -6,7 +6,6 @@ tennants:
 - test-from-helm-multitenant-repo:
     source_repositories:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
-    allowInternetAccess : true
     denyAllNetwork: true
     limits:
       cpu: 1000

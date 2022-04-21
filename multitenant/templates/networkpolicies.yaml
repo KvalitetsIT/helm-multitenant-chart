@@ -47,18 +47,6 @@ spec:
           name: {{ $allowedEngress }}
 {{ end }}
 
-{{- if ($values.allowInternetAccess)}}
-{{- if $values.allowInternetAccess}}
-    - ipBlock:
-        cidr: 0.0.0.0/0
-{{- if($valuesAtStart.egressNetworksToBlock) }}
-        except:
-          {{- range $toBlock := $valuesAtStart.egressNetworksToBlock }}
-          - {{ $toBlock  }}
-          {{- end}}
-{{- end }}
-{{- end }}
-{{- end }}
 {{- end }}
 ---
 {{ end }}

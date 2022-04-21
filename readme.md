@@ -61,7 +61,6 @@ tennants:
       cpu: 1000 #This is the number of allocated VCPU's (1000 is alot of vcpu's)
       memory: 200Gi
       longhorn.storageclass.storage.k8s.io/requests.storage: 100Gi
-    allowInternetAccess : true #True if tennant should be able to reach internet
     ingressAllowedNamespaces: #Namespaces that should be able to reach this namespace
       - DataStorageServices
       - ingress-nginx
@@ -86,12 +85,6 @@ egressAllowedNamespaces: #Namespaces that this tennant needs to be able to reach
 The values-file contains two lists; egressAllowedNamespaces and ingressAllowedNamespaces. Networkpolicies do not support namespace-whitelisting yet, so theese are **not** actually namespace-names, but the value of a label called "name". So in the example above we are saying that namespaces, containing the label name, with the value 'ingress-nginx' are whitelisted.
 
 **Important notice** : Because of this, you will need to make sure that all your namespaces that you wish to whitelist, has a label with the same name as namespace-name
-
-### `allowInternetAccess`
-```yml
-allowInternetAccess : true #True if tennant should be able to reach internet
-```
-For the tennant to be able to reach the world wide web, it needs to have this attribute set to true
 
 ### `denyAllNetwork`
 ```yml
