@@ -1,4 +1,5 @@
 appnamespace: infrastructure
+grafanaNamespace: infrastructure
 egressNetworksToBlock:
   - 10.0.0.0/20
   - 10.0.16.0/20
@@ -6,7 +7,8 @@ tennants:
 - test-from-helm-multitenant-repo:
     source_repositories:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
-    denyAllNetwork: true
+    denyAllNetwork: false
+    ingressAllowedGrafana: true
     limits:
       cpu: 1000
       memory: 200Gi

@@ -30,6 +30,17 @@ spec:
         matchLabels:
           name: {{ $allowedIngress }}
 {{- end }}
+{{- if $values.ingressAllowedGrafana }}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: {{ $.Values.grafanaNamespace }}
+    ports:
+      - protocol: TCP
+        port: 9090 # Prometheus
+      - protocol: TCP
+        port: 3100 # Loki
+{{- end }}
   egress:
   - to: # nodeLocal DNS
       - ipBlock:
