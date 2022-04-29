@@ -50,17 +50,17 @@ spec:
         protocol: UDP
   - to: # Kube-api
       - ipBlock:
-        cidr: 10.10.16.1/32
+          cidr: 10.10.16.1/32
     ports:
       - port: 443
         protocol: TCP
   - to:
       - ipBlock: # Master01
-        cidr: 192.168.0.6/32
+          cidr: 192.168.0.6/32
       - ipBlock: # Master02
-        cidr: 192.168.0.7/32
+          cidr: 192.168.0.7/32
       - ipBlock: # Master03
-        cidr: 192.168.0.8/32
+          cidr: 192.168.0.8/32
     ports:
       - port: 6443
         protocol: TCP
