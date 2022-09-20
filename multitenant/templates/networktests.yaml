@@ -1,3 +1,4 @@
+{{- if (.Values.networkTest) }}
 {{- $numberOfTenants := len .Values.tennants}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
@@ -19,5 +20,6 @@ spec:
               image: {{$.Values.networkTest.image}}:{{$.Values.networkTest.tag}}
           restartPolicy: Never
 ---
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}

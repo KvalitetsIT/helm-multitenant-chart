@@ -54,13 +54,11 @@ spec:
     ports:
       - port: 443
         protocol: TCP
-  - to:
-      - ipBlock: # Master01
-          cidr: 192.168.0.6/32
-      - ipBlock: # Master02
-          cidr: 192.168.0.7/32
-      - ipBlock: # Master03
-          cidr: 192.168.0.8/32
+  - to: # Master
+      {{- range $master := $valuesAtStart.masterIp }}
+      - ipBlock:
+          cidr: {{ $master }}/32
+      {{- end }}
     ports:
       - port: 6443
         protocol: TCP
@@ -73,6 +71,30 @@ spec:
         matchLabels:
           name: {{ $allowedEngress }}
 {{ end }}
+
+{{- if and ($values.allowInternetAccess) $values.allowInternetAccess }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $name }}-allow-internet
+  namespace: {{ $name }}
+  labels:
+    type: tenant
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except: # Local and container net
+              {{- range $toBlock := $valuesAtStart.egressNetworksToBlock }}
+              - {{ $toBlock }}
+              {{- end }}
+
+{{- end }}
 
 {{- end }}
 ---

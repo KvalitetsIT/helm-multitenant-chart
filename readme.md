@@ -96,7 +96,23 @@ To allow Grafana to connect to Loki and Prometheus in tennet.
 ```yml
 denyAllNetwork : true #True if alle network in and out of tennant is blocked and between pod in tennant
 ```
-For the tennant to be able to reach the world wide web, it needs to have this attribute set to true
+All network is denied by default
+
+### `allowInternetAccess`
+```yml
+allowInternetAccess: true #Set to true if tennant is allowed internet by default
+```
+For the tennant to be able to reach the world wide web, it needs to have this attribute set to true.
+**Should not be set, use insted netpol foreach service that need internet access!**
+
+### `masterIp`
+```yml
+masterIp:
+  - 192.168.0.2
+  - 192.168.0.3
+  - 192.168.0.4
+```
+Set this if the master IP is different from default 192.168.0.6, 192.168.0.7 and 192.168.0.8
 
 ### `defalut limits and request`
 ```yml
