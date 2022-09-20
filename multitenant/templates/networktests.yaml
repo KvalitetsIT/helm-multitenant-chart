@@ -1,4 +1,4 @@
-{{- if (.Values.networkTest) }}
+{{- if .Values.networkTest.enabled }}
 {{- $numberOfTenants := len .Values.tennants}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
