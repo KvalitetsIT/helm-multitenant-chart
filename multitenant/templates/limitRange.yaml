@@ -11,7 +11,7 @@ metadata:
     type: tenant
 spec:
   limits:
-  -  defaultRequest:
+  - defaultRequest:
       {{- if ($values.default) }}
       cpu: {{ $values.default.request.cpu }}
       memory: {{ $values.default.request.memory }}
