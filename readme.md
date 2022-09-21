@@ -114,17 +114,14 @@ masterIp:
 ```
 Set this if the master IP is different from default 192.168.0.6, 192.168.0.7 and 192.168.0.8
 
-### `defalut limits and request`
+### `defalut request`
 ```yml
 default:
-  limits:
-    cpu: 50m
-    memory: 128Mi
   request:
     cpu: 50m
     memory: 64Mi
 ```
-For the tenant there is a default resources limit and request on CPU and memory. The default are used for pods whits no resources defined.
+For the tenant there is a default resources request on CPU and memory. The default are used for pods whits no resources defined.
 
 ### `dockerconfigjson`
 ```yml

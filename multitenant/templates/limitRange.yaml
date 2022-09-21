@@ -11,17 +11,11 @@ metadata:
     type: tenant
 spec:
   limits:
-  - default:
+  -  defaultRequest:
       {{- if ($values.default) }}
-      cpu: {{ $values.default.limits.cpu }}
-      memory: {{ $values.default.limits.memory }}
-    defaultRequest:
       cpu: {{ $values.default.request.cpu }}
       memory: {{ $values.default.request.memory }}
       {{- else }}
-      cpu: 50m
-      memory: 128Mi
-    defaultRequest:
       cpu: 50m
       memory: 64Mi
       {{- end }}
