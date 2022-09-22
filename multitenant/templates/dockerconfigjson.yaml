@@ -9,6 +9,12 @@ kind: SealedSecret
 metadata:
   name: {{ $id }}
   namespace: {{ $name }}
+  {{- if ($val.annotations) }}
+  annotations:
+    {{- with $val.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   encryptedData:
     .dockerconfigjson: {{ $val.json  }}
@@ -35,6 +41,12 @@ kind: SealedSecret
 metadata:
   name: {{ $id }}
   namespace: {{ $name }}
+  {{- if ($val.annotations) }}
+  annotations:
+    {{- with $val.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   encryptedData:
     .dockerconfigjson: {{ $val.json  }}

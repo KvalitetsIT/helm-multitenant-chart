@@ -13,6 +13,11 @@ tennants:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     denyAllNetwork: false
     ingressAllowedGrafana: true
+    dockerconfig:
+      all-icr-io:
+        annotations:
+          hej: 123
+        json: AgC14spw
     limits:
       cpu: 1000
       memory: 200Gi
