@@ -2,7 +2,7 @@
 
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
-{{- if ($valuesAtStart.appnamespace) }}
+{{- if not $values.skipAppProject }}
 #=================== Namespace ===================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
