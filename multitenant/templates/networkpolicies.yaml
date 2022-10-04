@@ -24,17 +24,17 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          name: {{ $name }}
+          kubernetes.io/metadata.name: {{ $name }}
 {{- range $allowedIngress := $values.ingressAllowedNamespaces }}
     - namespaceSelector:
         matchLabels:
-          name: {{ $allowedIngress }}
+          kubernetes.io/metadata.name: {{ $allowedIngress }}
 {{- end }}
 {{- if $values.ingressAllowedGrafana }}
   - from:
     - namespaceSelector:
         matchLabels:
-          name: {{ $.Values.grafanaNamespace }}
+          kubernetes.io/metadata.name: {{ $.Values.grafanaNamespace }}
     ports:
       - protocol: TCP
         port: 9090 # Prometheus
@@ -65,11 +65,11 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          name: {{ $name }}
+          kubernetes.io/metadata.name: {{ $name }}
 {{- range $allowedEngress := $values.egressAllowedNamespaces }}
     - namespaceSelector:
         matchLabels:
-          name: {{ $allowedEngress }}
+          kubernetes.io/metadata.name: {{ $allowedEngress }}
 {{ end }}
 
 {{- if and ($values.allowInternetAccess) $values.allowInternetAccess }}
