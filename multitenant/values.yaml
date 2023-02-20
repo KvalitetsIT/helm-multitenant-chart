@@ -1,5 +1,8 @@
 appnamespace: infrastructure
 grafanaNamespace: infrastructure
+infrastructure:
+  blockIngress: true
+  namespace: infrastructure
 egressNetworksToBlock:
   - 10.0.0.0/20
   - 10.0.16.0/20
