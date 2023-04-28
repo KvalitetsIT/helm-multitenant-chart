@@ -2,7 +2,7 @@
 {{- $numberOfTenants := len .Values.tennants}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{$name}}-networktests
