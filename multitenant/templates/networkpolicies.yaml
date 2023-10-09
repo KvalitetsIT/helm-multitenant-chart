@@ -45,6 +45,8 @@ spec:
   - to: # nodeLocal DNS
       - ipBlock:
           cidr: 169.254.20.10/32
+      - ipBlock:
+          cidr: 10.43.0.10/32
     ports:
       - port: 53
         protocol: UDP
