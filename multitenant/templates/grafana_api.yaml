@@ -145,5 +145,6 @@ items:
     name:  grafana-tenant-scripts
 kind: List
 metadata: {}
+---
 {{ end }}
 {{ end }}

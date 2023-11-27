@@ -19,5 +19,5 @@ data:
  {{ $firstIteration = 0}}
 {{- end }}
 {{- "]" | nindent 4 }}
-
+---
 {{- end }}
