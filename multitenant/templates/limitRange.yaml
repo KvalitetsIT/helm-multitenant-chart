@@ -1,5 +1,6 @@
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
+{{- if not ($values.namespace) }}
 {{- if ($values.limits) }}
 #=================== LimitRange ===================
 apiVersion: v1
@@ -21,6 +22,7 @@ spec:
       {{- end }}
     type: Container
 ---
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}

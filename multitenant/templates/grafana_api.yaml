@@ -3,6 +3,7 @@
 {{- if ($valuesAtStart.grafanaurl) }}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
+{{- if not ($values.namespace) }}
 
 apiVersion: batch/v1
 kind: Job
@@ -144,4 +145,5 @@ items:
     name:  grafana-tenant-scripts
 kind: List
 metadata: {}
+{{ end }}
 {{ end }}

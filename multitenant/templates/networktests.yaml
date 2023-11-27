@@ -2,6 +2,7 @@
 {{- $numberOfTenants := len .Values.tennants}}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
+{{- if not ($values.namespace) }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -20,6 +21,7 @@ spec:
               image: {{$.Values.networkTest.image}}:{{$.Values.networkTest.tag}}
           restartPolicy: Never
 ---
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

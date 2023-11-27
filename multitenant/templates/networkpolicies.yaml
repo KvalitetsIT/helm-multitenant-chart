@@ -2,6 +2,7 @@
 
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
+{{- if not ($values.namespace) }}
 
 #Comments are from : https://www.openshift.com/blog/guide-to-kubernetes-ingress-network-policies
 
@@ -100,5 +101,6 @@ spec:
 
 {{- end }}
 ---
+{{ end }}
 {{ end }}
 {{ end }}

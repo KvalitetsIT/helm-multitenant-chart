@@ -14,7 +14,7 @@ metadata:
 
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
-
+{{- if not ($values.namespace) }}
 #=================== Namespace ===================
 apiVersion: v1
 kind: Namespace
@@ -25,5 +25,6 @@ metadata:
     type: tenant
 
 ---
+{{ end }}
 {{ end }}
 {{ end }}
