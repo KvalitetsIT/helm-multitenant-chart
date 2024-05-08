@@ -34,6 +34,13 @@ tennants:
       - ingress-nginx
     egressAllowedNamespaces:
       - ingress-nginx
+    appOfApps:
+      repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
+      path: "/apps"
+      targetRevision: "test"
+      valueFiles:
+        - "values.yaml"
+        - "values-test.yaml"
 
 - test2-from-helm-multitenant-repo:
     namespace: test-from-helm-multitenant-repo
@@ -64,6 +71,13 @@ tennants:
 sharedServices:
 - data-storage-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
+    appOfApps:
+      path: "/apps"
+      targetRevision: "test"
+      valueFiles:
+        - "values.yaml"
+        - "values-test.yaml"
+
 - login-services:
     repository: "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
 
