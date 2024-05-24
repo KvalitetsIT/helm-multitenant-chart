@@ -1,0 +1,26 @@
+{{- range $servicename, $value :=.Values.services}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $value.namespace }}-{{$servicename}}-allow-ingress
+  namespace: {{ $value.namespace }}
+spec:
+  ingress:
+    {{- $valuesAtStart := .}}
+    {{- range $valuesAtStart.allowedPods}}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{.namespace}}
+          podSelector:
+            matchLabels:
+              {{- range .matchLabels}}
+              {{- . | toYaml | nindent 14}}
+              {{- end}}
+      ports:
+        {{- $valuesAtStart.ports | toYaml | nindent 8}}
+    {{- end}}
+  podSelector: {}
+  policyTypes:
+    - Ingress
+{{- end }}
