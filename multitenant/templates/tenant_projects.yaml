@@ -27,6 +27,10 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: {{$valuesAtStart.appnamespace}}
     server: https://kubernetes.default.svc
+  {{- range $values.extraDestinations }}
+  - namespace: {{.}}
+    server: https://kubernetes.default.svc
+  {{- end }}
 
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:

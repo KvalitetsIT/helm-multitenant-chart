@@ -16,7 +16,9 @@ spec:
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:
-  - '{{$values.repository}}'
+  {{- range $values.source_repositories }}
+    - '{{.}}'
+  {{- end }}
 
   # Only permit applications to deploy to the guestbook namespace in the same cluster
   destinations:
@@ -24,7 +26,10 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: {{$valuesAtStart.appnamespace}}
     server: https://kubernetes.default.svc
-
+  {{- range $values.extraDestinations }}
+  - namespace: {{.}}
+    server: https://kubernetes.default.svc
+  {{- end }}
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
   - group: '*'
