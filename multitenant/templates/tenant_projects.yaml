@@ -32,10 +32,14 @@ spec:
     server: https://kubernetes.default.svc
   {{- end }}
 
+  {{- if ($values.allowClusterResource ) }}
+  {{- if $values.allowClusterResource }}
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
+  {{- end }}
+  {{- end }}
 
 ---
 {{- end }}
