@@ -28,6 +28,18 @@ spec:
     repoURL: {{$values.appOfApps.repository}}
     targetRevision: {{$values.appOfApps.targetRevision}}
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{$name}}-applications
+  namespace: {{$valuesAtStart.appnamespace}}
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: {{$values.appOfApps.repository}}
+  type: git
+type: Opaque
+---
 {{ end }}
 {{ end }}
 {{ end }}
