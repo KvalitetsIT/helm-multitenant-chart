@@ -27,12 +27,13 @@ spec:
     path: {{$values.appOfApps.path}}
     repoURL: {{$values.appOfApps.repository}}
     targetRevision: {{$values.appOfApps.targetRevision}}
-  {{- if or ($value.sync) ($value.createNamespace)}}
+  {{- if  ($values.appOfApps.sync) }}
   syncPolicy:
-  {{- if ($value.appOfApps.sync.auto)}}
+  {{- if ($values.appOfApps.sync.auto)}}
     automated: 
-      prune: {{ $value..appOfAppssync.prune | default true}}
-      selfHeal: {{ $value.appOfApps.sync.selfHeal | default true}}
+      prune: {{ $values.appOfAppssync.prune | default true}}
+      selfHeal: {{ $values.appOfApps.sync.selfHeal | default true}}
+  {{- end}}
   {{- end}}
 ---
 apiVersion: v1
@@ -50,4 +51,4 @@ type: Opaque
 {{ end }}
 {{ end }}
 {{ end }}
-{{ end }}
+{{- end}}
