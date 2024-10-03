@@ -27,6 +27,27 @@ spec:
     path: {{$values.appOfApps.path}}
     repoURL: {{$values.appOfApps.repository}}
     targetRevision: {{$values.appOfApps.targetRevision}}
+  {{- if or ($value.sync) ($value.createNamespace)}}
+  syncPolicy:
+  {{- if ($value.sync.auto)}}
+    automated: 
+      prune: {{ $value.sync.prune | default true}}
+      selfHeal: {{ $value.sync.selfHeal | default true}}
+  {{- end}}
+  {{- if or ($value.createNamespace) ($value.serverSideApply) }}
+    syncOptions:
+  {{- end }}
+  {{- if $value.createNamespace }}
+      - CreateNamespace=true
+  {{- end}}
+  {{- if $value.serverSideApply }}
+      - ServerSideApply=true
+  {{- end}}
+  {{- end}}
+  {{- if ($value.ignoreDifferences)}}
+  ignoreDifferences:
+  {{- toYaml $value.ignoreDifferences | nindent 4}}
+  {{- end}}
 ---
 apiVersion: v1
 kind: Secret
