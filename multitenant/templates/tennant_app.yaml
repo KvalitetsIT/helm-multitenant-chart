@@ -31,7 +31,7 @@ spec:
   syncPolicy:
   {{- if ($values.appOfApps.sync.auto)}}
     automated: 
-      prune: {{ $values.appOfAppssync.prune | default true}}
+      prune: {{ $values.appOfApps.sync.prune | default true}}
       selfHeal: {{ $values.appOfApps.sync.selfHeal | default true}}
   {{- end}}
   {{- end}}
