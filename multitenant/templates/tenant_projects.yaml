@@ -27,9 +27,9 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: {{$valuesAtStart.appnamespace}}
     server: https://kubernetes.default.svc
-  {{- range $values.extraDestinations }}
-  - namespace: {{.}}
-    server: https://kubernetes.default.svc
+  {{- range $name, $values :=  $values.extraDestinations }}
+  - namespace: {{ $name }}
+    server: {{ $values.server | default "https://kubernetes.default.svc" }}
   {{- end }}
 
   {{- if ($values.allowClusterResource ) }}
