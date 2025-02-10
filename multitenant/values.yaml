@@ -12,6 +12,9 @@ masterIp:
   - 192.168.0.8
 tennants:
 - test-from-helm-multitenant-repo:
+    namespaceLabels: |
+      test: true
+      trivy-scan: true
     source_repositories:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     denyAllNetwork: false

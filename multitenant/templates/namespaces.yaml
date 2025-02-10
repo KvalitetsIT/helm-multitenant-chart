@@ -23,6 +23,9 @@ metadata:
   labels:
     name: {{ $name }}
     type: tenant
+    {{- if ($values.namespaceLabels)}}
+    {{- $values.namespaceLabels | nindent 4 }}
+    {{- end }}
 
 ---
 {{ end }}
