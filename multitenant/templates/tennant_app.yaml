@@ -13,7 +13,7 @@ metadata:
   namespace: {{$valuesAtStart.appnamespace}}
 spec:
   destination:
-    namespace: {{$name}}
+    namespace: {{$values.appOfApps.namespace | default $name}}
     server: https://kubernetes.default.svc
   project: {{$name}}
   source:
