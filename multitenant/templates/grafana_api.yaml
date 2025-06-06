@@ -1,7 +1,7 @@
 
 {{- $valuesAtStart := .Values}}
 {{- if ($valuesAtStart.grafanaurl) }}
-{{- range .Values.tennants }}
+{{- range .Values.tenants }}
 {{- range $name, $values := . }}
 {{- if not ($values.namespace) }}
 

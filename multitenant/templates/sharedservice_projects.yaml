@@ -3,7 +3,6 @@
 {{- range .Values.sharedServices }}
 {{- range $name, $values := . }}
 {{- if not $values.skipAppProject }}
-#=================== Namespace ===================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:

@@ -1,8 +1,7 @@
-{{- range .Values.tennants }}
+{{- range .Values.tenants }}
 {{- range $name, $values := . }}
 {{- if not ($values.namespace) }}
 {{- if ($values.limits) }}
-#=================== Ressource quota ===================
 apiVersion: v1
 kind: ResourceQuota
 metadata:

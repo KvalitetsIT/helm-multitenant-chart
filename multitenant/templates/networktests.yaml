@@ -1,6 +1,6 @@
 {{- if .Values.networkTest.enabled }}
-{{- $numberOfTenants := len .Values.tennants}}
-{{- range .Values.tennants }}
+{{- $numberOfTenants := len .Values.tenants}}
+{{- range .Values.tenants }}
 {{- range $name, $values := . }}
 {{- if not ($values.namespace) }}
 apiVersion: batch/v1

@@ -1,4 +1,4 @@
-{{- range .Values.tennants }}
+{{- range .Values.tenants }}
 {{- range $name, $values := . }}
 
 {{- if ($values.dockerconfig) }}

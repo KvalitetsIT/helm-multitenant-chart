@@ -1,14 +1,13 @@
 {{- $valuesAtStart := .Values}}
 
-{{- range .Values.tennants }}
+{{- range .Values.tenants }}
 {{- range $name, $values := . }}
 {{- if not $values.skipAppProject }}
-#=================== Namespace ===================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: {{$name}}
-  namespace: {{$valuesAtStart.appnamespace}}
+  namespace: {{$valuesAtStart.namespaceArgo}}
   labels:
     type: tenant-project
 spec:
@@ -21,11 +20,15 @@ spec:
     - '{{.}}'
   {{ end }}
 
-  # Only permit applications to deploy to the guestbook namespace in the same cluster
+  {{- if not $valuesAtStart.appsInArgoNamespace }}
+   # Allow Applications from the tenants namespace
+  sourceNamespaces:
+  - {{ $values.namespace | default $name }}
+  {{- end }}
+
+  # Cluster and namespaces where applications are permitted to be deployed to
   destinations:
   - namespace: {{ $values.namespace | default $name}}
-    server: https://kubernetes.default.svc
-  - namespace: {{$valuesAtStart.appnamespace}}
     server: https://kubernetes.default.svc
   {{- range $name, $values :=  $values.extraDestinations }}
   - namespace: {{ $name }}

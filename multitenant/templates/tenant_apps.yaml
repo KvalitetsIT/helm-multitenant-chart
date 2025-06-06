@@ -1,0 +1,42 @@
+{{- $valuesAtStart := .Values }}
+
+{{- range .Values.tenants }}
+{{- range $name, $values := . }}
+{{- if not $values.skipAppProject }}
+{{- if $values.appOfApps }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    argocd.argoproj.io/instance: {{ $values.appOfApps.name | default (printf "%s-applications" $name) }}
+  name: {{ $values.appOfApps.name | default (printf "%s-applications" $name) }}
+  namespace: {{ if $valuesAtStart.appsInArgoNamespace }}{{ $valuesAtStart.namespaceArgo }}{{ else }}{{ $name }}{{ end }}
+spec:
+  destination:
+    namespace: {{$values.appOfApps.namespace | default $name}}
+    server: https://kubernetes.default.svc
+  project: {{ $name }}
+  source:
+  {{- if $values.appOfApps.valueFiles }}
+    helm:
+      valueFiles:
+      {{- range $filename := $values.appOfApps.valueFiles }}
+      - {{ $filename }}
+      {{- end }}
+  {{- end }}
+    path: {{ $values.appOfApps.path }}
+    repoURL: {{ $values.appOfApps.repository }}
+    targetRevision: {{ $values.appOfApps.targetRevision }}
+  {{- if $values.appOfApps.sync }}
+  syncPolicy:
+  {{- if $values.appOfApps.sync.auto }}
+    automated:
+      prune: {{ $values.appOfApps.sync.prune | default true }}
+      selfHeal: {{ $values.appOfApps.sync.selfHeal | default true }}
+  {{- end }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
