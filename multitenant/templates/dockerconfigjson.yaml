@@ -24,6 +24,32 @@ spec:
       namespace: {{ $name }}
     type: kubernetes.io/dockerconfigjson
 ---
+
+{{- if ($val.addToExtraDestinations) }}
+{{- range $namespace, $destination := $values.extraDestinations}}
+
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: {{ $id }}
+  namespace: {{ $namespace }}
+  {{- if ($val.annotations) }}
+  annotations:
+    {{- with $val.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  encryptedData:
+    .dockerconfigjson: {{ $val.json  }}
+  template:
+    metadata:
+      name: {{ $id }}
+      namespace: {{ $namespace }}
+    type: kubernetes.io/dockerconfigjson
+---
+{{ end }}
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}

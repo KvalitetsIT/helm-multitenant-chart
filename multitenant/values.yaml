@@ -19,11 +19,18 @@ tennants:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     denyAllNetwork: false
     ingressAllowedGrafana: true
+    extraDestinations:
+      extra-dest-from-helm-multitenant-repo:
+        server: "https://kubernetes.default.svc"
+      extra-dest-2-from-helm-multitenant-repo:
+        server: "https://kubernetes.default.svc"
     dockerconfig:
       all-icr-io:
         annotations:
           hej: 123
+          sealedsecrets.bitnami.com/cluster-wide: 'true'
         json: AgC14spw
+        addToExtraDestinations: true
     limits:
       cpu: 1000
       memory: 200Gi
@@ -51,6 +58,9 @@ tennants:
       - "https://github.com/KvalitetsIT/kithosting-LoginServices.git"
     denyAllNetwork: false
     ingressAllowedGrafana: true
+    extraDestinations:
+      extra-dest-test2:
+        server: "https://kubernetes.default.svc"
     dockerconfig:
       all-icr-io:
         annotations:
