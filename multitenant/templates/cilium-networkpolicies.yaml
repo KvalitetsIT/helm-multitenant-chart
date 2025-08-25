@@ -1,0 +1,101 @@
+{{- $valuesAtStart := .Values}}
+
+{{- if $valuesAtStart.useCiliumNetPols }}
+{{- range .Values.tennants }}
+{{- range $name, $values := . }}
+{{- if not ($values.namespace) }}
+
+#=================== Cilium Network policies ===================
+# Based on: https://docs.cilium.io/en/stable/security/policy/
+
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $name }}-allow-namespaces
+  namespace: {{ $name }}
+  labels:
+    type: tenant
+spec:
+  endpointSelector: {}   # svarer til podSelector: {}
+  ingress:
+  {{- if and (not ($values.denyAllNetwork)) (not $values.denyAllNetwork) }}
+  - fromEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $name }}
+  {{- range $allowedIngress := $values.ingressAllowedNamespaces }}
+  - fromEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $allowedIngress }}
+  {{- end }}
+  {{- if $values.ingressAllowedGrafana }}
+  - fromEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $.Values.grafanaNamespace }}
+    toPorts:
+      - ports:
+          - port: "9090"
+            protocol: TCP
+          - port: "3100"
+            protocol: TCP
+  {{- end }}
+  {{- end }}
+
+  egress:
+  - toCIDRSet:   # nodeLocal DNS
+      - cidr: 169.254.20.10/32
+      - cidr: 10.43.0.10/32
+    toPorts:
+      - ports:
+          - port: "53"
+            protocol: UDP
+
+  - toCIDRSet:   # kube-api
+      - cidr: 10.10.16.1/32
+    toPorts:
+      - ports:
+          - port: "443"
+            protocol: TCP
+
+  - toCIDRSet:   # master nodes
+      {{- range $master := $valuesAtStart.masterIp }}
+      - cidr: {{ $master }}/32
+      {{- end }}
+    toPorts:
+      - ports:
+          - port: "6443"
+            protocol: TCP
+
+  - toEndpoints:   # samme namespace
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $name }}
+  {{- range $allowedEgress := $values.egressAllowedNamespaces }}
+  - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $allowedEgress }}
+  {{- end }}
+
+{{- if and ($values.allowInternetAccess) $values.allowInternetAccess }}
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $name }}-allow-internet
+  namespace: {{ $name }}
+  labels:
+    type: tenant
+spec:
+  endpointSelector: {}
+  egress:
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            {{- range $toBlock := $valuesAtStart.egressNetworksToBlock }}
+            - {{ $toBlock }}
+            {{- end }}
+{{- end }}
+
+{{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

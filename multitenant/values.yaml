@@ -1,4 +1,5 @@
 appnamespace: infrastructure
+useCiliumNetPols: true
 grafanaNamespace: infrastructure
 infrastructure:
   blockIngress: true

@@ -1,5 +1,6 @@
 {{- $valuesAtStart := .Values}}
 
+{{- if not $valuesAtStart.useCiliumNetPols }}
 {{- range .Values.tennants }}
 {{- range $name, $values := . }}
 {{- if not ($values.namespace) }}
@@ -96,11 +97,11 @@ spec:
               {{- range $toBlock := $valuesAtStart.egressNetworksToBlock }}
               - {{ $toBlock }}
               {{- end }}
-
 {{- end }}
 
 {{- end }}
 ---
-{{ end }}
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
