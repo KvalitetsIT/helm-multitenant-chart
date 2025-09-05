@@ -41,20 +41,17 @@ spec:
   {{- end }}
 
   egress:
-  - toCIDRSet:   # nodeLocal DNS
-      - cidr: 169.254.20.10/32
-      - cidr: 10.43.0.10/32
-    toPorts:
-      - ports:
-          - port: "53"
-            protocol: UDP
+  - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s:k8s-app": kube-dns
+      toPorts:
+        - ports:
+           - port: "53"
+             protocol: ANY
 
-  - toCIDRSet:   # kube-api
-      - cidr: 10.10.16.1/32
-    toPorts:
-      - ports:
-          - port: "443"
-            protocol: TCP
+  - toEntities:
+      - kube-apiserver
 
   - toCIDRSet:   # master nodes
       {{- range $master := $valuesAtStart.masterIp }}
