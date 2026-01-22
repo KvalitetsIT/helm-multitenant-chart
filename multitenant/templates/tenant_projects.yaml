@@ -21,6 +21,30 @@ spec:
     - '{{.}}'
   {{ end }}
 
+  roles:
+  # A role which provides read-only access to all applications in the project
+  - name: read-only
+    description: Read-only privileges to {{$name}}
+    policies:
+    - p, proj:{{$name}}:read-only, applications, get, {{$name}}/*, allow
+    - p, proj:{{$name}}:read-only, logs, get, {{$name}}/*, allow
+    groups:
+    - project-{{$name}}-readonly
+  - name: sync
+    description: Sync privileges to {{$name}}
+    policies:
+    - p, proj:{{$name}}:sync, applications, sync, {{$name}}/*, allow
+    groups:
+    - project-{{$name}}-sync
+  - name: admin
+    description: Admin privileges to {{$name}}
+    policies:
+    - p, proj:{{$name}}:admin, applications, *, {{$name}}/*, allow
+    - p, proj:{{$name}}:admin, pods, *, {{$name}}/*, allow
+    - p, proj:{{$name}}:admin, exec, *, {{$name}}/*, allow
+    groups:
+    - project-{{$name}}-admin
+  
   # Only permit applications to deploy to the guestbook namespace in the same cluster
   destinations:
   - namespace: {{ $values.namespace | default $name}}
